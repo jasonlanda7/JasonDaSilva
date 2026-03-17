@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jason Silva | Propulsion Portfolio</title>
+  <meta name="description" content="Jason Silva — Aerospace engineering portfolio focused on propulsion, regenerative cooling, and engine design tools." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top">JS</a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a class="btn btn-small" href="assets/resume.pdf" target="_blank">Resume</a>
+  </div>
+</nav>
+
+<header id="top" class="hero reveal">
+  <div class="container hero-content">
+    <p class="tag">Aerospace Engineering • Propulsion • CFD</p>
+    <h1>Jason Silva</h1>
+    <p class="subtitle">
+      Designing reliable rocket propulsion systems — ignition hardware,
+      regenerative cooling workflows, and custom engine analysis tools.
+    </p>
+    <div class="hero-actions">
+      <a class="btn" href="#projects">View Projects</a>
+      <a class="btn btn-ghost" href="#contact">Contact</a>
+    </div>
+  </div>
+</header>
+
+<section id="about" class="section reveal">
+  <div class="container">
+    <h2>About</h2>
+    <p>
+      Aerospace engineering student focused on propulsion hardware,
+      regenerative cooling design, and engineering software tools.
+      I prioritize repeatable testing, manufacturable designs,
+      and data-backed engineering decisions.
+    </p>
+  </div>
+</section>
+
+<section id="projects" class="section reveal">
+  <div class="container">
+    <h2>Featured Projects</h2>
+
+    <!-- Project 1 -->
+    <div class="card project">
+  <h3>Pyrotechnic Igniter System — Igniter Lead</h3>
+  <p>
+    Designed a low-cost igniter clamp and improved firing circuit retention
+    for repeatable ignition performance.
+  </p>
+  <a class="btn" href="igniter.html">View Full Case Study</a>
+</div>
+
+    <!-- Project 2 -->
+    <div class="card project">
+  <h3>Regeneratively Cooled Engine Workflow</h3>
+  <p>
+    Complete regen engine workflow from contour derivation
+    to regen channel sizing.
+  </p>
+  <a class="btn" href="regen-engine.html">View Full Case Study</a>
+</div>
+
+    <!-- Project 3 -->
+    <div class="card project">
+  <h3>ShockWve — Engine Design Program</h3>
+  <p>
+    Custom propulsion software to standardize and accelerate engine calculations.
+  </p>
+  <a class="btn" href="shockwve.html">View Full Case Study</a>
+</div>
+
+  </div>
+</section>
+
+<section id="contact" class="section reveal">
+  <div class="container">
+    <h2>Contact</h2>
+    <p>Email: <a href="mailto:jasonlanda7@gmail.com">jasonlanda7@gmail.com</a></p>
+    <p>
+      LinkedIn:
+      <a href="https://www.linkedin.com/in/jasonlanda777ason" target="_blank">
+        linkedin.com/in/jasonlanda777ason
+      </a>
+    </p>
+  </div>
+</section>
+
+<footer>
+  <p>© <span id="year"></span> Jason Silva</p>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  const reveals = document.querySelectorAll(".reveal");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("active");
+      }
+    });
+  }, { threshold: 0.15 });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

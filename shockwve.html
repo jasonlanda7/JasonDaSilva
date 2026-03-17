@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ShockWve | Jason Silva</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">JS</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="engine-hero reveal">
+  <div class="container">
+    <h1 class="engine-title">ShockWve</h1>
+    <p class="engine-subtitle">
+      A Python-based nozzle geometry generation platform integrating
+      Method of Characteristics (MOC) and Rao bell design,
+      with simulation-ready contour export.
+    </p>
+
+    <p style="font-weight:600; margin-top:20px;">
+      ShockWve bridges analytical propulsion modeling and high-fidelity CFD validation.
+    </p>
+
+    <div style="margin-top:35px;">
+      <a class="btn"
+         href="https://github.com/jasonlanda7/SHOCKWVE/releases"
+         target="_blank"
+         rel="noopener">
+        Download ShockWve (GitHub Releases)
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORM OVERVIEW -->
+<section class="engine-step reveal">
+  <div class="container">
+    <h2>Platform Overview</h2>
+    <p>
+      ShockWve is a modular nozzle design environment built to generate
+      smooth, simulation-ready contours from thermodynamic and geometric inputs.
+    </p>
+    <p>
+      It integrates analytical performance modeling, geometric construction,
+      spline smoothing, and structured export within a single workflow.
+    </p>
+  </div>
+</section>
+
+<!-- MODELING ENGINES -->
+<section class="engine-step dark reveal">
+  <div class="container">
+    <h2>Dual Nozzle Modeling Engines</h2>
+
+    <ul>
+      <li><strong>Method of Characteristics (MOC)</strong> for shock-free expansion optimization</li>
+      <li><strong>Rao Bell Nozzle</strong> for compact performance-driven geometry</li>
+    </ul>
+
+    <p>
+      Both engines compute exit Mach number, expansion ratio,
+      throat/exit radii, thrust consistency, and expansion regime classification.
+    </p>
+  </div>
+</section>
+
+<!-- UI INPUT -->
+<section class="engine-step reveal">
+  <div class="container step-grid">
+
+    <div class="step-text">
+      <h2>Control Core Interface</h2>
+
+      <p>
+        The ShockWve control panel provides structured input fields for:
+      </p>
+
+      <ul>
+        <li>Chamber pressure (P₀)</li>
+        <li>Chamber temperature (T₀)</li>
+        <li>Specific heat ratio (γ)</li>
+        <li>Ambient and exit pressure</li>
+        <li>Thrust target</li>
+        <li>Geometry shaping exponent</li>
+      </ul>
+
+      <p>
+        Inputs are validated before computation to maintain physical consistency.
+      </p>
+    </div>
+
+    <div class="step-image">
+      <img src="assets/shockwve_ui_input_panel.png"
+           alt="ShockWve Control Core Interface">
+    </div>
+
+  </div>
+</section>
+
+<!-- GEOMETRY & RESULTS -->
+<section class="engine-step dark reveal">
+  <div class="container step-grid">
+
+    <div class="step-text">
+      <h2>Contour Generation & Results</h2>
+
+      <p>
+        ShockWve constructs the nozzle geometry using:
+      </p>
+
+      <ul>
+        <li>Power-law convergent section</li>
+        <li>Circular throat blending</li>
+        <li>MOC or Rao divergent profile</li>
+        <li>Global cubic spline smoothing</li>
+      </ul>
+
+      <p>
+        The final contour is resampled at high resolution and prepared
+        for CFD meshing or CAD reconstruction.
+      </p>
+
+      <p>
+        The platform also evaluates mass flow rate, exit Mach number,
+        thrust consistency, and over/under-expanded flow conditions.
+      </p>
+    </div>
+
+    <div class="step-image">
+      <img src="assets/shockwve_ui_output_results.png"
+           alt="ShockWve Contour Generation and Output Results">
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPORT -->
+<section class="engine-step reveal">
+  <div class="container">
+    <h2>Simulation Export Pipeline</h2>
+
+    <p>
+      The generated nozzle contour is exported as structured coordinate data,
+      enabling direct import into:
+    </p>
+
+    <ul>
+      <li>ANSYS Fluent</li>
+      <li>SolidWorks</li>
+      <li>CAD environments</li>
+      <li>Custom meshing workflows</li>
+    </ul>
+
+    <p style="margin-top:30px;">
+      <a class="btn btn-ghost"
+         href="https://github.com/jasonlanda7/SHOCKWVE/releases"
+         target="_blank"
+         rel="noopener">
+        View Source & Releases on GitHub
+      </a>
+    </p>
+
+    <p style="font-weight:600; margin-top:30px;">
+      ShockWve integrates analytical propulsion modeling,
+      geometric construction, and CFD-ready export into a unified design environment.
+    </p>
+  </div>
+</section>
+
+<footer class="engine-footer">
+  <div class="container">
+    <a class="btn" href="index.html">Back to Portfolio</a>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll(".reveal");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("active");
+      }
+    });
+  }, { threshold: 0.2 });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
