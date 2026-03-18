@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Igniter System | Jason Silva</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">JS</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+
+<section class="engine-hero reveal">
+  <div class="container">
+    <h1 class="engine-title">Pyrotechnic Igniter System</h1>
+    <p class="engine-subtitle">
+      Igniter system development focused on reliable ignition performance,
+      robust mechanical retention, and repeatable testing validation.
+    </p>
+  </div>
+</section>
+
+<!-- STEP 1 -->
+
+<section class="engine-step reveal">
+  <div class="container step-grid">
+    <div class="step-text">
+      <h2>Step 1 — System Design & Responsibilities</h2>
+      <p>
+        As Igniter Lead, I redesigned the clamp retention system, improved firing
+        circuitry, and developed standardized molding and testing procedures.
+      </p>
+
+```
+  <ul>
+    <li>Low-cost clamp retention redesign</li>
+    <li>Improved vibration robustness</li>
+    <li>Repeatability-driven test campaign design</li>
+    <li>Documented preparation procedures</li>
+  </ul>
+</div>
+
+<div class="step-image">
+  <img src="assets/igniter_engine.PNG" alt="Igniter installed view">
+</div>
+```
+
+  </div>
+</section>
+
+<!-- STEP 2 -->
+
+<section class="engine-step dark reveal">
+  <div class="container step-grid">
+
+```
+<div class="step-image">
+  <img src="assets/igniter_isometric.PNG" alt="Isometric view">
+</div>
+
+<div class="step-text">
+  <h2>Step 2 — Igniter Mount Redesign</h2>
+  <p>
+    The updated igniter mount introduces a modular clamp system designed
+    for improved retention, alignment, and manufacturability under dynamic loading.
+  </p>
+  <p>
+    The design reduces part complexity while improving installation consistency
+    and structural robustness.
+  </p>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- STEP 3 -->
+
+<section class="engine-step reveal">
+  <div class="container step-grid">
+    <div class="step-text">
+      <h2>Step 3 — Exploded Assembly & Detail</h2>
+      <p>
+        Exploded views highlight component relationships and assembly order,
+        ensuring clarity in integration and maintenance procedures.
+      </p>
+    </div>
+
+```
+<div class="step-image">
+  <img src="assets/igniter_explode.PNG" alt="Exploded view">
+</div>
+```
+
+  </div>
+</section>
+
+<!-- STEP 4 -->
+
+<section class="engine-step dark reveal">
+  <div class="container step-grid">
+
+```
+<div class="step-image">
+  <video autoplay muted loop playsinline>
+    <source src="assets/igniter_bracket_animation.mp4" type="video/mp4">
+  </video>
+</div>
+
+<div class="step-text">
+  <h2>Step 4 — Design Animation</h2>
+  <p>
+    A dynamic animation was created to visualize bracket motion,
+    alignment behavior, and system integration in operation.
+  </p>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- STEP 5 -->
+
+<section class="engine-step reveal">
+  <div class="container step-grid">
+    <div class="step-text">
+      <h2>Step 5 — Testing & Validation</h2>
+      <p>
+        The igniter uses a molded pyrotechnic compound ignited via a resistive bridgewire.
+        When current is applied, the wire rapidly heats and initiates combustion.
+      </p>
+      <p>
+        Testing verifies ignition reliability, flame strength, and combustion consistency
+        prior to propulsion system integration.
+      </p>
+    </div>
+
+```
+<div class="step-image">
+  <video controls>
+    <source src="assets/igniter_testing.mp4" type="video/mp4">
+  </video>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- BACK BUTTON -->
+
+<div class="container">
+  <a class="btn" href="index.html">Back to Portfolio</a>
+</div>
+
+<!-- REVEAL SCRIPT -->
+
+<script>
+  const reveals = document.querySelectorAll(".reveal");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("active");
+      }
+    });
+  }, { threshold: 0.2 });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
