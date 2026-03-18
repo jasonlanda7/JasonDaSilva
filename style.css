@@ -260,7 +260,7 @@ footer{
 
 /* Slightly shrink animation */
 .step-image video {
-  width: 88%;          /* tweak 85–92% if needed */
+  width: 95%;          /* tweak 85–92% if needed */
   max-width: 500px;
   margin: 0 auto;
   display: block;
