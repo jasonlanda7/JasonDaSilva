@@ -265,3 +265,234 @@ footer{
   margin: 0 auto;
   display: block;
 }
+
+/* =========================
+   PROJECT BACKGROUND IMAGES
+   ========================= */
+
+.project {
+  position: relative;
+  overflow: hidden;
+  color: white;
+  background-size: cover;
+  background-position: center;
+}
+
+/* 🔧 Your images mapped correctly */
+.project.igniter {
+  background-image: url("assets/igniter_holder.png");
+}
+
+.project.regen {
+  background-image: url("assets/gas_dynamics.png");
+}
+
+.project.shockwve {
+  background-image: url("assets/shockwve.png");
+}
+
+/* 🌌 purple tint overlay */
+.project::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      rgba(10, 0, 25, 0.85),
+      rgba(40, 0, 80, 0.85)
+    ),
+    radial-gradient(
+      circle at 70% 30%,
+      rgba(120, 0, 255, 0.25),
+      transparent 60%
+    );
+
+  z-index: 1;
+}
+
+/* keep text on top */
+.project * {
+  position: relative;
+  z-index: 2;
+}
+
+/* smooth hover */
+.project {
+  transition: all 0.4s ease;
+}
+
+.project:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 80px rgba(124,58,237,.25);
+  background-size: 110%;
+}
+
+/* =========================
+   ABOUT SECTION UPGRADE
+   ========================= */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.about-text p {
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.blt-logo {
+  width: 120px;
+  margin-top: 20px;
+  opacity: 0.9;
+}
+
+.blt-credit {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.blt-credit a {
+  color: #aaa;
+  text-decoration: none;
+}
+
+.blt-credit a:hover {
+  color: var(--purple-light);
+}
+
+/* image grid */
+.about-images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+/* BIG main image */
+.about-images img.big {
+  grid-column: span 2;
+  height: 300px;
+}
+
+/* all images */
+.about-images img {
+  width: 100%;
+  border-radius: 14px;
+  object-fit: cover;
+  height: 200px;
+  cursor: pointer;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.about-images img:hover {
+  transform: scale(1.04);
+  box-shadow: 0 20px 60px rgba(124,58,237,0.3);
+}
+
+/* mobile */
+@media (max-width: 900px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-images img {
+    height: 200px;
+  }
+}
+
+/* =========================
+   HERO VIDEO BACKGROUND
+   ========================= */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+}
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: none;
+  z-index: 0;
+}
+
+.hero-overlay {
+  display: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* optional: stronger readability */
+.hero h1,
+.hero .subtitle,
+.hero .tag {
+  text-shadow: 0 4px 24px rgba(0,0,0,0.45);
+}
+
+.sim-label {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  z-index: 2;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--purple);
+  text-decoration: none;
+}
+
+.brand:hover {
+  color: var(--purple-light);
+}
+
+#contact a {
+  color: var(--purple);
+  text-decoration: none;
+}
+
+#contact a:hover {
+  color: var(--purple-light);
+}
+
+/* LIGHTBOX */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 12px;
+}
+
+.about-text h2 {
+  margin-top: 0;
+}

@@ -21,9 +21,16 @@
   </div>
 </nav>
 
-<header id="top" class="hero reveal">
-  <div class="container hero-content">
-    <p class="tag">Aerospace Engineering • Propulsion • CFD</p>
+<header id="top" class="hero">
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="assets/transient_sim.mp4" type="video/mp4">
+  </video>
+<p class="sim-label">
+    k-ω SST nozzle simulation • 01/01/2025
+  </p>
+
+  <div class="container hero-content reveal">
+    <p class="tag">Aerospace Engineering • Propulsion • CFD • Aerodynamics • Gas Dynamics</p>
     <h1>Jason Silva</h1>
     <p class="subtitle">
       Designing reliable rocket propulsion systems — ignition hardware,
@@ -37,14 +44,48 @@
 </header>
 
 <section id="about" class="section reveal">
-  <div class="container">
-    <h2>About</h2>
-    <p>
-      Aerospace engineering student focused on propulsion hardware,
-      regenerative cooling design, and engineering software tools.
-      I prioritize repeatable testing, manufacturable designs,
-      and data-backed engineering decisions.
-    </p>
+  <div class="container about-grid">
+
+    <!-- LEFT: TEXT -->
+    <div class="about-text">
+      <h2>About</h2>
+      <p>
+        Aerospace engineering student focused on propulsion hardware,
+        regenerative cooling systems, and engine analysis tools.
+      </p>
+
+      <p>
+        I currently serve as <strong>Igniter Lead</strong> for the
+        Beach Launch Team (BLT), where I lead igniter system development
+        and support propulsion testing operations.
+      </p>
+
+      <p>
+        I also work as a <strong>Propulsion Design Assistant</strong>,
+        contributing to the development of the team's first
+        regeneratively cooled rocket engine.
+      </p>
+
+      <p class="blt-credit">
+        Beach Launch Team —
+        <a href="https://www.linkedin.com/company/csulb-beach-launch-team/"
+           target="_blank">
+           LinkedIn
+        </a>
+      </p>
+
+      <img src="assets/blt_logo.png" class="blt-logo" alt="BLT logo">
+    </div>
+
+    <!-- RIGHT: IMAGES -->
+    <div class="about-images">
+  <img class="big" src="assets/mogging.JPG" alt="Team photo">
+
+  <img src="assets/hands_on.jpeg" alt="Igniter work">
+  <img src="assets/hotfire.jpeg" alt="Hot fire test">
+  <img src="assets/igniter_team.jpeg" alt="Igniter team">
+</div>
+
   </div>
 </section>
 
@@ -53,7 +94,7 @@
     <h2>Featured Projects</h2>
 
     <!-- Project 1 -->
-    <div class="card project">
+    <div class="card project igniter">
   <h3>Pyrotechnic Igniter System — Igniter Lead</h3>
   <p>
     Designed a low-cost igniter clamp and improved firing circuit retention
@@ -63,7 +104,7 @@
 </div>
 
     <!-- Project 2 -->
-    <div class="card project">
+    <div class="card project regen">
   <h3>Regeneratively Cooled Engine Workflow</h3>
   <p>
     Complete regen engine workflow from contour derivation
@@ -73,7 +114,7 @@
 </div>
 
     <!-- Project 3 -->
-    <div class="card project">
+    <div class="card project shockwve">
   <h3>ShockWve — Engine Design Program</h3>
   <p>
     Custom propulsion software to standardize and accelerate engine calculations.
@@ -87,7 +128,17 @@
 <section id="contact" class="section reveal">
   <div class="container">
     <h2>Contact</h2>
-    <p>Email: <a href="mailto:jasonlanda7@gmail.com">jasonlanda7@gmail.com</a></p>
+
+    <p>
+      Email:
+      <a href="mailto:jasonlanda7@gmail.com">jasonlanda7@gmail.com</a>
+    </p>
+
+    <p>
+      Phone:
+      <a href="tel:+13236163418">+1 (323) 616-3418</a>
+    </p>
+
     <p>
       LinkedIn:
       <a href="https://www.linkedin.com/in/jasonlanda777ason" target="_blank">
@@ -117,5 +168,25 @@
   reveals.forEach(el => observer.observe(el));
 </script>
 
+<div class="lightbox" id="lightbox">
+  <img id="lightbox-img" src="">
+</div>
+
+<script>
+  const images = document.querySelectorAll(".about-images img");
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+
+  images.forEach(img => {
+    img.addEventListener("click", () => {
+      lightbox.style.display = "flex";
+      lightboxImg.src = img.src;
+    });
+  });
+
+  lightbox.addEventListener("click", () => {
+    lightbox.style.display = "none";
+  });
+</script>
 </body>
 </html>
