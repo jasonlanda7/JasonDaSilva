@@ -26,12 +26,13 @@ body{
 }
 
 .nav{
-  position:sticky;
-  top:0;
-  backdrop-filter:blur(12px);
-  background:rgba(15,12,26,0.7);
-  padding:15px 0;
-  border-bottom:1px solid rgba(255,255,255,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(12px);
+  background: rgba(15,12,26,0.88);
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
 .nav-inner{
@@ -495,4 +496,42 @@ footer{
 
 .about-text h2 {
   margin-top: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+#about,
+#projects,
+#contact,
+#top {
+  scroll-margin-top: 90px;
+}
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-align: center;
+  z-index: 0;
+}
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: none;
+  z-index: 0;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
 }
