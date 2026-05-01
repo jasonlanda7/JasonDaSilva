@@ -77,13 +77,31 @@
       <img src="assets/blt_logo.png" class="blt-logo" alt="BLT logo">
     </div>
 
-    <!-- RIGHT: IMAGES -->
-    <div class="about-images">
-  <img class="big" src="assets/mogging.JPG" alt="Team photo">
+<!-- RIGHT: BLT MEDIA -->
+<div class="about-media-grid">
+  <img class="media-wide" src="assets/mogging.JPG" alt="Team photo">
 
   <img src="assets/hands_on.jpeg" alt="Igniter work">
   <img src="assets/hotfire.jpeg" alt="Hot fire test">
   <img src="assets/igniter_team.jpeg" alt="Igniter team">
+  <video autoplay muted loop playsinline preload="auto">
+  <source src="assets/staticfire.mp4" type="video/mp4">
+</video>
+  <img src="assets/jason2.JPG" alt="At the launch site in front of the rocket rail">
+  <img src="assets/jason3.JPG" alt="Working with the team at the launch rail">
+
+  <video class="media-tall" autoplay muted loop playsinline preload="auto">
+    <source src="assets/rocket_launch.mp4" type="video/mp4">
+  </video>
+
+
+<img src="assets/jason1.JPG" alt="Working on launch electronics in the field">
+
+  <video autoplay muted loop playsinline preload="auto">
+    <source src="assets/thermite.mp4" type="video/mp4">
+  </video>
+
+
 </div>
 
   </div>
@@ -168,24 +186,36 @@
   reveals.forEach(el => observer.observe(el));
 </script>
 
-<div class="lightbox" id="lightbox">
-  <img id="lightbox-img" src="">
-</div>
+<div class="lightbox" id="lightbox"></div>
 
 <script>
-  const images = document.querySelectorAll(".about-images img");
+  const mediaItems = document.querySelectorAll(".about-media-grid img, .about-media-grid video");
   const lightbox = document.getElementById("lightbox");
-  const lightboxImg = document.getElementById("lightbox-img");
 
-  images.forEach(img => {
-    img.addEventListener("click", () => {
+  mediaItems.forEach(item => {
+    item.addEventListener("click", () => {
       lightbox.style.display = "flex";
-      lightboxImg.src = img.src;
+
+      if (item.tagName === "IMG") {
+        lightbox.innerHTML = `<img src="${item.src}" alt="">`;
+      }
+
+      if (item.tagName === "VIDEO") {
+        const source = item.querySelector("source");
+        if (source) {
+          lightbox.innerHTML = `
+            <video autoplay controls loop playsinline>
+              <source src="${source.src}" type="${source.type}">
+            </video>
+          `;
+        }
+      }
     });
   });
 
   lightbox.addEventListener("click", () => {
     lightbox.style.display = "none";
+    lightbox.innerHTML = "";
   });
 </script>
 </body>
