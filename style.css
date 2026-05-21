@@ -676,6 +676,56 @@ footer {
   }
 }
 
+/* =========================
+   REGEN HERO LAYOUT FIX
+   ========================= */
+
+.borealis-layout {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(540px, 1fr) minmax(420px, 540px);
+  gap: 90px;
+  align-items: center;
+  padding-top: 110px;
+  padding-bottom: 80px;
+}
+
+.model-card {
+  width: 100%;
+  max-width: 540px;
+  justify-self: end;
+}
+
+.borealis-copy {
+  max-width: 560px;
+}
+
+.borealis-title {
+  max-width: 700px;
+  line-height: 0.9;
+}
+
+/* fullscreen protection */
+@media (min-width: 1500px) {
+  .borealis-layout {
+    grid-template-columns: minmax(620px, 1fr) minmax(420px, 520px);
+    gap: 120px;
+  }
+}
+
+/* tablet/mobile */
+@media (max-width: 1180px) {
+  .borealis-layout {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .model-card {
+    justify-self: center;
+    max-width: 100%;
+  }
+}
 /* make vertical video span 2 rows */
 .about-media-grid .media-tall {
   grid-row: span 2;

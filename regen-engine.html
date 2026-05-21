@@ -5,8 +5,519 @@
   <title>Regenerative Cooled Engine Development | Jason Silva</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .borealis-hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      isolation: isolate;
+      background: #05070b;
+    }
+
+    .borealis-video {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100vh;
+      object-fit: cover;
+      opacity: 0.35;
+      filter: saturate(0.85) contrast(1.15);
+      z-index: -10;
+      pointer-events: none;
+    }
+
+    .borealis-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 70% 30%, rgba(255,255,255,0.12), transparent 32%),
+        linear-gradient(90deg, rgba(5,7,11,0.96), rgba(5,7,11,0.72), rgba(5,7,11,0.95));
+      z-index: -2;
+    }
+
+    .borealis-hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 30%;
+      background: linear-gradient(transparent, #05070b);
+      z-index: -1;
+    }
+
+    .borealis-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+      gap: 42px;
+      align-items: center;
+      padding-top: 110px;
+      padding-bottom: 80px;
+    }
+
+    .eyebrow {
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.68);
+      margin-bottom: 18px;
+    }
+
+    .borealis-title {
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      line-height: 0.86;
+      letter-spacing: -0.07em;
+      margin: 0 0 24px;
+    }
+
+    .borealis-copy {
+      max-width: 640px;
+      color: rgba(255,255,255,0.78);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .borealis-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .model-card {
+      position: relative;
+      min-height: 600px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 28px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      box-shadow: 0 28px 80px rgba(0,0,0,0.45);
+      overflow: hidden;
+      backdrop-filter: blur(14px);
+    }
+
+    #borealis-viewer {
+      width: 100%;
+      height: 600px;
+      display: block;
+      cursor: grab;
+    }
+
+    #borealis-viewer:active {
+      cursor: grabbing;
+    }
+
+    .model-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(120deg, rgba(10,13,20,0.02), rgba(255,255,255,0.08), rgba(10,13,20,0.02)),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0 1px, transparent 1px 16px);
+      transform: translateY(var(--cover-shift, 0%));
+      transition: transform 0.08s linear;
+      mix-blend-mode: screen;
+      opacity: 0.42;
+    }
+
+    .model-hint {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      color: rgba(255,255,255,0.72);
+      font-size: 0.84rem;
+      pointer-events: none;
+    }
+
+    .model-hint span {
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.38);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .viewer-error {
+      position: absolute;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 34px;
+      text-align: center;
+      color: rgba(255,255,255,0.82);
+      background: rgba(5,7,11,0.85);
+    }
+
+    .spec-panel {
+      background: rgba(5, 7, 11, 0.86);
+      color: white;
+      padding: 90px 0;
+      position: relative;
+      z-index: 1;
+      backdrop-filter: blur(6px);
+    }
+
+    .spec-intro {
+      max-width: 760px;
+      margin-bottom: 36px;
+      color: rgba(255,255,255,0.76);
+      line-height: 1.75;
+    }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .spec-card {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 22px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.035));
+    }
+
+    .spec-card strong {
+      display: block;
+      font-size: 1.45rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    .spec-card span {
+      color: rgba(255,255,255,0.65);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .spec-card.wide {
+      grid-column: span 2;
+    }
+
+    .note-card {
+      margin-top: 18px;
+      padding: 20px 22px;
+      border-left: 3px solid rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.055);
+      color: rgba(255,255,255,0.72);
+      line-height: 1.7;
+    }
+
+
+    .engine-step {
+      position: relative;
+      z-index: 1;
+      background: rgba(15, 12, 26, 0.82);
+      backdrop-filter: blur(5px);
+    }
+
+    .engine-step.dark {
+      background: rgba(42, 15, 79, 0.78);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(5,7,11,0.18), rgba(5,7,11,0.72));
+      pointer-events: none;
+      z-index: -9;
+    }
+
+    @media (max-width: 980px) {
+      .borealis-layout,
+      .spec-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .model-card,
+      #borealis-viewer {
+        min-height: 430px;
+        height: 430px;
+      }
+
+      .spec-card.wide {
+        grid-column: auto;
+      }
+    }
+
+
+    /* FINAL OVERRIDE: fixed purple video background like index page */
+    html, body {
+      background: radial-gradient(circle at 20% 10%, rgba(124,58,237,0.42), transparent 40%),
+                  radial-gradient(circle at 80% 0%, rgba(168,85,247,0.32), transparent 42%),
+                  #0f0c1a !important;
+    }
+
+    .borealis-video {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      object-fit: cover !important;
+      opacity: 0.62 !important;
+      filter: saturate(1.15) contrast(1.08) brightness(0.82) hue-rotate(285deg) !important;
+      z-index: -3 !important;
+      pointer-events: none !important;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 22% 12%, rgba(124,58,237,0.42), transparent 38%),
+        radial-gradient(circle at 82% 4%, rgba(168,85,247,0.32), transparent 40%),
+        linear-gradient(180deg, rgba(15,12,26,0.20), rgba(15,12,26,0.64));
+    }
+
+    .borealis-hero {
+      background: transparent !important;
+      isolation: auto !important;
+    }
+
+    .borealis-hero::before {
+      background: linear-gradient(90deg, rgba(15,12,26,0.72), rgba(80,24,130,0.28), rgba(15,12,26,0.68)) !important;
+      z-index: 0 !important;
+    }
+
+    .borealis-hero::after {
+      background: linear-gradient(transparent, rgba(15,12,26,0.62)) !important;
+      z-index: 0 !important;
+    }
+
+    .borealis-layout { position: relative; z-index: 2; }
+
+    .spec-panel,
+    .engine-step {
+      background: rgba(15,12,26,0.58) !important;
+      backdrop-filter: blur(10px) saturate(1.25) !important;
+      -webkit-backdrop-filter: blur(10px) saturate(1.25) !important;
+      border-top: 1px solid rgba(168,85,247,0.25);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .engine-step.dark {
+      background: rgba(44,14,84,0.52) !important;
+    }
+
+    .model-card {
+      background: radial-gradient(circle at 35% 20%, rgba(168,85,247,0.34), transparent 45%),
+                  linear-gradient(145deg, rgba(255,255,255,0.14), rgba(58,14,104,0.30)) !important;
+      border-color: rgba(190,150,255,0.36) !important;
+    }
+
+
+    /* TRUE INDEX-STYLE BACKGROUND WINDOW OVERRIDE */
+    html, body {
+      min-height: 100%;
+      background: #0f0c1a !important;
+    }
+
+    body {
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .borealis-video {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      object-fit: cover !important;
+      opacity: 0.72 !important;
+      filter: saturate(1.2) contrast(1.08) brightness(0.86) hue-rotate(285deg) !important;
+      z-index: 0 !important;
+      pointer-events: none !important;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(124,58,237,0.45), transparent 40%),
+        radial-gradient(circle at 80% 0%, rgba(168,85,247,0.36), transparent 42%),
+        linear-gradient(to bottom, rgba(15,12,26,0.32), rgba(15,12,26,0.64));
+    }
+
+    .nav,
+    .borealis-hero,
+    .spec-panel,
+    .engine-step,
+    body > .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    .borealis-hero {
+      background: transparent !important;
+      isolation: auto !important;
+    }
+
+    .borealis-hero::before {
+      z-index: 0 !important;
+      background:
+        radial-gradient(circle at 72% 28%, rgba(168,85,247,0.20), transparent 34%),
+        linear-gradient(90deg, rgba(15,12,26,0.66), rgba(80,24,130,0.22), rgba(15,12,26,0.62)) !important;
+    }
+
+    .borealis-hero::after {
+      z-index: 0 !important;
+      background: linear-gradient(transparent, rgba(15,12,26,0.35)) !important;
+    }
+
+    .borealis-layout {
+      position: relative;
+      z-index: 3;
+    }
+
+    .spec-panel,
+    .engine-step {
+      background: rgba(15,12,26,0.46) !important;
+      backdrop-filter: blur(12px) saturate(1.25) !important;
+      -webkit-backdrop-filter: blur(12px) saturate(1.25) !important;
+      border-top: 1px solid rgba(168,85,247,0.24);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .engine-step.dark {
+      background: rgba(44,14,84,0.44) !important;
+    }
+
+    .spec-card,
+    .note-card,
+    .model-card {
+      backdrop-filter: blur(14px) saturate(1.2);
+      -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    }
+
+
+    /* WIDE SCREEN FIX: keep STL card from covering hero text */
+    @media (min-width: 1100px) {
+      .borealis-layout {
+        grid-template-columns: minmax(430px, 0.95fr) minmax(360px, 520px) !important;
+        gap: 72px !important;
+      }
+
+      .borealis-layout > div:first-child {
+        position: relative;
+        z-index: 4;
+        max-width: 620px;
+      }
+
+      .borealis-title {
+        font-size: clamp(3.5rem, 7vw, 6.6rem) !important;
+        max-width: 100%;
+        overflow-wrap: normal;
+      }
+
+      .borealis-copy {
+        max-width: 580px !important;
+      }
+
+      .model-card {
+        width: min(100%, 520px) !important;
+        max-width: 520px !important;
+        justify-self: end !important;
+        z-index: 3;
+      }
+
+      #borealis-viewer {
+        width: 100% !important;
+      }
+    }
+
+    @media (min-width: 1450px) {
+      .borealis-layout {
+        grid-template-columns: minmax(500px, 1fr) 500px !important;
+        gap: 88px !important;
+      }
+
+      .model-card {
+        max-width: 500px !important;
+      }
+    }
+
+
+
+    /* FINAL FULLSCREEN OVERLAP FIX: give title and STL separate lanes */
+    @media (min-width: 1100px) {
+      .borealis-layout.container {
+        width: min(1180px, 86vw) !important;
+        grid-template-columns: minmax(0, 1fr) 460px !important;
+        gap: 96px !important;
+      }
+
+      .borealis-layout > div:first-child {
+        min-width: 0 !important;
+        max-width: 540px !important;
+        overflow: visible !important;
+      }
+
+      .borealis-title {
+        font-size: clamp(3.6rem, 5.6vw, 5.8rem) !important;
+        letter-spacing: -0.075em !important;
+        max-width: 540px !important;
+        white-space: nowrap !important;
+      }
+
+      .borealis-copy {
+        max-width: 500px !important;
+      }
+
+      .model-card {
+        width: 460px !important;
+        max-width: 460px !important;
+        min-height: 500px !important;
+        height: 500px !important;
+        justify-self: end !important;
+        margin-left: 0 !important;
+      }
+
+      #borealis-viewer {
+        height: 500px !important;
+      }
+    }
+
+    @media (min-width: 1500px) {
+      .borealis-layout.container {
+        width: min(1240px, 82vw) !important;
+        grid-template-columns: minmax(0, 560px) 480px !important;
+        gap: 120px !important;
+      }
+
+      .model-card {
+        width: 480px !important;
+        max-width: 480px !important;
+      }
+    }
+
+    @media (max-width: 1099px) {
+      .borealis-title {
+        white-space: normal !important;
+      }
+    }
+
+  </style>
 </head>
 <body>
+
+<!-- Fixed full-page video background, same behavior as index hero video -->
+<video class="borealis-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+  <source src="assets/transient_sim.mp4" type="video/mp4">
+</video>
 
 <nav class="nav">
   <div class="nav-inner">
@@ -17,14 +528,114 @@
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="engine-hero reveal">
+<!-- HERO / BOREALIS INTERACTIVE MODEL -->
+<header class="borealis-hero reveal" id="top">
+  <div class="container borealis-layout">
+    <div>
+      <p class="eyebrow">Regeneratively Cooled Engine Development</p>
+      <h1 class="borealis-title">BOREALIS</h1>
+      <p class="borealis-copy">
+        BOREALIS is a liquid oxygen / RP-1 regeneratively cooled engine concept sized for an
+        830 lbf sea-level thrust target. This page combines the CAD model, design conditions,
+        contour workflow, and cooling-channel development into one interactive case study.
+      </p>
+      <div class="borealis-actions">
+        <a class="btn" href="#borealis-specs">View Requirements</a>
+        <a class="btn btn-ghost" href="assets/borealis_engine.stl" download>Download STL</a>
+      </div>
+    </div>
+
+    <div class="model-card" aria-label="Interactive 3D model of the BOREALIS engine">
+      <canvas id="borealis-viewer"></canvas>
+      <div class="model-overlay" id="model-cover"></div>
+      <div class="model-hint">
+        <span>Drag to rotate • scroll/pinch to zoom</span>
+        <span>Scroll page to uncover regen detail</span>
+      </div>
+      <div class="viewer-error" id="viewer-error">
+        <p>
+          The interactive model could not load in this browser. Use the STL download button
+          to open the BOREALIS CAD file locally.
+        </p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- USEFUL ENGINE REQUIREMENTS -->
+<section class="spec-panel reveal" id="borealis-specs">
   <div class="container">
-    <h1 class="engine-title">Regenerative Cooled Engine Development</h1>
-    <p class="engine-subtitle">
-      A structured propulsion design process — from isentropic theory,
-      to NASA CEA performance modeling, to contour generation and CFD validation.
+    <p class="eyebrow">Design Requirements</p>
+    <h1 class="engine-title">BOREALIS Operating Point</h1>
+    <p class="spec-intro">
+      Key values from the engine sizing run are summarized here instead of listing every raw solver output.
+      The focus is on the propellant selection, design target, flow split, nozzle geometry, and thermal inputs
+      that drive regenerative cooling design.
     </p>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <strong>830 lbf</strong>
+        <span>Desired thrust at sea-level design altitude.</span>
+      </div>
+      <div class="spec-card">
+        <strong>304.58 psi</strong>
+        <span>Chamber pressure.</span>
+      </div>
+      <div class="spec-card">
+        <strong>LOX / RP-1</strong>
+        <span>Oxidizer and fuel selection.</span>
+      </div>
+      <div class="spec-card">
+        <strong>1.8 O/F</strong>
+        <span>Oxidizer-to-fuel mass ratio.</span>
+      </div>
+      <div class="spec-card">
+        <strong>1.492 kg/s</strong>
+        <span>Total propellant mass flow rate.</span>
+      </div>
+      <div class="spec-card">
+        <strong>0.533 / 0.959</strong>
+        <span>Fuel / oxidizer mass flow rates in kg/s.</span>
+      </div>
+      <div class="spec-card">
+        <strong>3020 K</strong>
+        <span>Chamber temperature used for thermal sizing.</span>
+      </div>
+      <div class="spec-card">
+        <strong>2475 m/s</strong>
+        <span>Calculated exit velocity.</span>
+      </div>
+      <div class="spec-card">
+        <strong>39.74 mm</strong>
+        <span>Throat diameter.</span>
+      </div>
+      <div class="spec-card">
+        <strong>77.11 mm</strong>
+        <span>Exit diameter.</span>
+      </div>
+      <div class="spec-card">
+        <strong>86.58 mm</strong>
+        <span>Chamber diameter.</span>
+      </div>
+      <div class="spec-card">
+        <strong>3.76</strong>
+        <span>Nozzle expansion ratio, Ae/At.</span>
+      </div>
+      <div class="spec-card wide">
+        <strong>0.348 m total length</strong>
+        <span>Includes cylindrical chamber, converging section, throat region, and diverging nozzle length.</span>
+      </div>
+      <div class="spec-card wide">
+        <strong>30° / 15°</strong>
+        <span>Convergent and divergent half angles used for contour generation.</span>
+      </div>
+    </div>
+
+    <div class="note-card">
+      Regen-focused geometry: chamber length 0.2258 m, convergent length 0.0485 m,
+      divergent length 0.0736 m, chamber volume 0.0013 m³, and throat radius of curvature 0.0298 m.
+    </div>
   </div>
 </section>
 
@@ -44,7 +655,6 @@
     </div>
 
     <div class="step-image">
-      <!-- ADD YOUR STEP 1 IMAGES HERE -->
       <img src="assets/Isentropic.png" alt="Isentropic equation derivation">
     </div>
   </div>
@@ -60,11 +670,11 @@
         chemical equilibrium and real combustion effects.
       </p>
       <p>
-        Chamber temperature, specific impulse, gamma variation,
-        and optimal mixture ratio were evaluated across operating conditions.
+        Chamber temperature, gamma, molecular weight, and gas composition were evaluated
+        across the selected LOX / RP-1 operating point.
       </p>
       <p>
-        This refined thermodynamic properties used in contour generation.
+        This refined thermodynamic properties used in contour generation and cooling analysis.
       </p>
     </div>
 
@@ -80,7 +690,7 @@
     <div class="step-text">
       <h2>Step 3 — Contour Generation & CFD Validation</h2>
       <p>
-        SHOCKWVE, A contour generating tool was then used to generate the nozzle contour
+        SHOCKWVE, a contour-generating tool, was used to generate the nozzle contour
         based on updated thermodynamic properties.
       </p>
       <p>
@@ -99,15 +709,7 @@
   </div>
 </section>
 
-<footer class="engine-footer">
-  <div class="container">
-
-  </div>
-
-    <!-- ============================= -->
 <!-- REGENERATIVE CHANNEL DESIGN -->
-<!-- ============================= -->
-
 <section class="engine-step dark reveal">
   <div class="container">
     <h1 class="engine-title" style="margin-bottom:80px;">
@@ -148,7 +750,7 @@
     <div class="step-text">
       <h2>Step 2 — Channel Geometry & Coolant Flow Modeling</h2>
       <p>
-        Using the HEATWVE program, a Regenerative channel geometry is defined at the throat and along the chamber
+        Using the HEATWVE program, regenerative channel geometry is defined at the throat and along the chamber
         using hydraulic diameter, cross-sectional area, and coolant mass flow rate.
       </p>
       <p>
@@ -208,18 +810,149 @@
   </div>
 </section>
 
+<div class="container" style="padding: 50px 0 80px;">
+  <a class="btn" href="index.html">Back to Portfolio</a>
+</div>
 
-</footer>
-<div class="container">
-    <a class="btn" href="index.html">Back to Portfolio</a>
-  </div>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+  import * as THREE from 'three';
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+  import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+
+  const canvas = document.getElementById('borealis-viewer');
+  const modelCard = canvas.closest('.model-card');
+  const cover = document.getElementById('model-cover');
+  const errorPanel = document.getElementById('viewer-error');
+
+  const scene = new THREE.Scene();
+  scene.background = null;
+
+  const camera = new THREE.PerspectiveCamera(35, 1, 0.001, 100);
+  camera.position.set(0.25, 0.18, 0.42);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.25;
+  renderer.localClippingEnabled = true;
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = 0.75;
+  controls.minDistance = 0.12;
+  controls.maxDistance = 1.2;
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x273244, 2.2));
+
+  const keyLight = new THREE.DirectionalLight(0xffffff, 2.4);
+  keyLight.position.set(2, 3, 4);
+  scene.add(keyLight);
+
+  const rimLight = new THREE.DirectionalLight(0x9fb8ff, 1.7);
+  rimLight.position.set(-3, 1, -2);
+  scene.add(rimLight);
+
+  const clippingPlane = new THREE.Plane(new THREE.Vector3(1, 0, 0), 999);
+  const modelGroup = new THREE.Group();
+  scene.add(modelGroup);
+
+  const loader = new STLLoader();
+  let modelLoaded = false;
+
+  const violetMetal = new THREE.MeshPhysicalMaterial({
+    color: 0xb45cff,
+    emissive: 0x3f007a,
+    emissiveIntensity: 0.22,
+    metalness: 0.92,
+    roughness: 0.18,
+    clearcoat: 0.85,
+    clearcoatRoughness: 0.10,
+    reflectivity: 0.95,
+    side: THREE.DoubleSide,
+    clippingPlanes: [clippingPlane],
+    clipShadows: true
+  });
+
+  loader.load(
+    'assets/borealis_engine.stl',
+    (geometry) => {
+      geometry.computeVertexNormals();
+      geometry.center();
+
+      const mesh = new THREE.Mesh(geometry, violetMetal);
+      mesh.rotation.set(Math.PI / 2, 0, -Math.PI / 8);
+
+      const box = new THREE.Box3().setFromObject(mesh);
+      const size = box.getSize(new THREE.Vector3());
+      const maxDim = Math.max(size.x, size.y, size.z) || 1;
+      mesh.scale.multiplyScalar(0.28 / maxDim);
+
+      modelGroup.add(mesh);
+
+      controls.target.set(0, 0, 0);
+      controls.update();
+      modelLoaded = true;
+      updateScrollReveal();
+    },
+    undefined,
+    () => {
+      errorPanel.style.display = 'grid';
+      errorPanel.innerHTML = '<p>The STL model could not load. Make sure <strong>assets/borealis_engine.stl</strong> exists next to this HTML file.</p>';
+    }
+  );
+
+  function resizeRenderer() {
+    const rect = modelCard.getBoundingClientRect();
+    const width = Math.max(rect.width, 1);
+    const height = Math.max(rect.height, 1);
+    renderer.setSize(width, height, false);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+  }
+
+  function updateScrollReveal() {
+    const rect = modelCard.getBoundingClientRect();
+    const viewport = window.innerHeight || document.documentElement.clientHeight;
+    const progress = THREE.MathUtils.clamp((viewport - rect.top) / (viewport + rect.height), 0, 1);
+
+    cover.style.setProperty('--cover-shift', `${progress * -115}%`);
+
+    if (modelLoaded) {
+      clippingPlane.constant = THREE.MathUtils.lerp(999, 0.015, progress);
+    }
+  }
+
+  function animate() {
+    resizeRenderer();
+    updateScrollReveal();
+    controls.update();
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('scroll', updateScrollReveal, { passive: true });
+  window.addEventListener('resize', resizeRenderer);
+  animate();
+</script>
+
 <script>
-  const reveals = document.querySelectorAll(".reveal");
+  const reveals = document.querySelectorAll('.reveal');
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.add("active");
+        entry.target.classList.add('active');
       }
     });
   }, { threshold: 0.2 });
