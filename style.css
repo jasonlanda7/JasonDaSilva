@@ -731,3 +731,97 @@ footer {
   grid-row: span 2;
   height: 100%;
 }
+
+/* =========================
+   SHOCKWVE PAGE
+   ========================= */
+
+body {
+  background: #000 !important;
+  overflow-x: hidden;
+}
+
+/* jade rabbit background */
+.jade-bg {
+  position: fixed;
+  inset: 0;
+  width: 55vw;
+  max-width: 700px;
+  margin: auto;
+  opacity: 0.08;
+  object-fit: contain;
+  z-index: 0;
+  pointer-events: none;
+  filter:
+    drop-shadow(0 0 40px rgba(0,255,255,0.25))
+    drop-shadow(0 0 60px rgba(255,0,180,0.18));
+}
+
+/* make sections glass windows */
+.engine-hero,
+.engine-step,
+.engine-footer {
+  position: relative;
+  z-index: 2;
+  background: rgba(8,8,12,0.58);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+/* neon title */
+.shock-title {
+  font-size: clamp(4rem, 10vw, 8rem);
+  letter-spacing: -0.08em;
+}
+
+.shock-blue {
+  color: #00e5ff;
+  text-shadow:
+    0 0 10px #00e5ff,
+    0 0 24px #00e5ff,
+    0 0 60px rgba(0,229,255,0.8);
+}
+
+.shock-pink {
+  color: #ff2bd6;
+  text-shadow:
+    0 0 10px #ff2bd6,
+    0 0 24px #ff2bd6,
+    0 0 60px rgba(255,43,214,0.8);
+}
+
+/* dual nozzle cards */
+.shock-grid {
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.shock-card {
+  background: rgba(10,10,16,0.62);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  overflow: hidden;
+  padding: 20px;
+  backdrop-filter: blur(12px);
+}
+
+.shock-card img {
+  width: 100%;
+  display: block;
+  border-radius: 14px;
+}
+
+@media (max-width: 900px) {
+  .shock-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jade-bg {
+    width: 90vw;
+    opacity: 0.05;
+  }
+}

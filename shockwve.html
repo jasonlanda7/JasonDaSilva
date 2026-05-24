@@ -1,201 +1,633 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>ShockWve | Jason Silva</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShockWve | Neon Preview</title>
+  <style>
+    :root {
+      --cyan: #00e7ff;
+      --pink: #ff2bd6;
+      --green: #00ff66;
+      --text: #f8fbff;
+      --muted: rgba(248,251,255,.72);
+      --glass: rgba(4, 9, 16, .68);
+      --line: rgba(0, 231, 255, .22);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #000;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(0, 231, 255, .12), transparent 34%),
+        radial-gradient(circle at 82% 18%, rgba(255, 43, 214, .14), transparent 34%),
+        radial-gradient(circle at 50% 90%, rgba(0, 231, 255, .08), transparent 38%),
+        #000;
+    }
+
+    .jade-bg {
+      position: fixed;
+      inset: 0;
+      width: min(64vw, 760px);
+      height: auto;
+      margin: auto;
+      opacity: .13;
+      z-index: -2;
+      pointer-events: none;
+      filter:
+        drop-shadow(0 0 24px rgba(0, 231, 255, .38))
+        drop-shadow(0 0 44px rgba(255, 43, 214, .28));
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.72));
+    }
+
+    .container {
+      width: min(1180px, 92%);
+      margin: auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(0, 231, 255, .13);
+    }
+
+    .nav-inner {
+      width: min(1180px, 92%);
+      margin: auto;
+      height: 74px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      text-decoration: none;
+      font-weight: 900;
+      letter-spacing: -.06em;
+      font-size: 1.45rem;
+    }
+
+    .brand .blue { color: var(--cyan); text-shadow: 0 0 14px var(--cyan); }
+    .brand .pink { color: var(--pink); text-shadow: 0 0 14px var(--pink); }
+
+    .nav-links {
+      display: flex;
+      gap: 26px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,.82);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: .84rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: 11px;
+      color: var(--cyan);
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      border: 1px solid rgba(0, 231, 255, .65);
+      background: rgba(0, 231, 255, .04);
+      box-shadow: inset 0 0 18px rgba(0, 231, 255, .08), 0 0 18px rgba(0, 231, 255, .12);
+      transition: .25s ease;
+    }
+
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 0 28px rgba(0, 231, 255, .32); }
+    .btn-pink { color: var(--pink); border-color: rgba(255, 43, 214, .65); background: rgba(255, 43, 214, .04); }
+    .btn-pink:hover { box-shadow: 0 0 28px rgba(255, 43, 214, .32); }
+
+    .hero {
+      min-height: calc(100vh - 74px);
+      display: flex;
+      align-items: center;
+      padding: 70px 0;
+    }
+
+    .hero-panel, .section-panel, .footer-panel {
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 28px;
+
+  background: transparent;
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 12px 40px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.04);
+
+  position: relative;
+  overflow: hidden;
+}
+
+    .hero-panel {
+      position: relative;
+      overflow: hidden;
+      padding: 58px 50px;
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(360px, 0.92fr);
+      gap: 72px;
+      align-items: center;
+    }
+
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(0,231,255,.07), transparent 70%, rgba(255,43,214,.06)),
+        repeating-linear-gradient(90deg, rgba(0,231,255,.05) 0 1px, transparent 1px 22px);
+      pointer-events: none;
+      opacity: .0005;
+    }
+
+    .hero-content, .terminal-card { position: relative; z-index: 2; }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--cyan);
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .title {
+      margin: 0 0 28px;
+      font-size: clamp(3.2rem, 7.2vw, 6.4rem);
+      line-height: .83;
+      letter-spacing: -.085em;
+      font-weight: 900;
+    }
+
+    .title .blue {
+      color: transparent;
+      -webkit-text-stroke: 2px var(--cyan);
+      text-shadow: 0 0 14px var(--cyan), 0 0 48px rgba(0,231,255,.75);
+    }
+
+    .title .pink {
+      color: transparent;
+      -webkit-text-stroke: 2px var(--pink);
+      text-shadow: 0 0 14px var(--pink), 0 0 48px rgba(255,43,214,.75);
+    }
+
+    .hero-copy {
+      max-width: 520px;
+      color: rgba(255,255,255,.84);
+      font-size: 1.04rem;
+      line-height: 1.8;
+    }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 34px; }
+
+    .feature-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 42px;
+    }
+
+    .mini-feature {
+      padding: 18px 0 0;
+    }
+
+    .icon {
+      font-size: 2rem;
+      color: var(--cyan);
+      text-shadow: 0 0 18px var(--cyan);
+      margin-bottom: 12px;
+    }
+
+    .mini-feature strong {
+      display: block;
+      font-size: .88rem;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .mini-feature span {
+      color: var(--muted);
+      font-size: .83rem;
+      line-height: 1.5;
+    }
+
+    .terminal-card {
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.72);
+      box-shadow: 0 0 46px rgba(0,231,255,.13);
+    }
+
+    .terminal-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 44px;
+      padding: 0 14px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      color: rgba(255,255,255,.75);
+      font-size: .8rem;
+      justify-content: center;
+      position: relative;
+    }
+
+    .dots { position: absolute; left: 14px; display: flex; gap: 7px; }
+    .dot { width: 11px; height: 11px; border-radius: 50%; display: block; }
+    .red { background: #ff4b4b; } .yellow { background: #ffd23c; } .green { background: #19f36b; }
+
+    .terminal-card img {
+      width: 100%;
+      display: block;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 24px;
+      padding: 22px;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: .94rem;
+    }
+
+    .stats span { color: rgba(255,255,255,.72); }
+    .stats b { color: var(--cyan); font-weight: 800; }
+    .status { grid-column: 1 / -1; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.08); }
+    .status b { color: var(--green); }
+
+    section { padding: 54px 0; }
+    .section-panel { padding: 38px; }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 28px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      margin: 0;
+      letter-spacing: -.04em;
+    }
+
+    .section-head p { color: var(--muted); max-width: 560px; line-height: 1.65; margin: 0; }
+
+    .nozzle-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .plot-card {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: inset 0 0 40px rgba(0, 231, 255, .03);
+    }
+
+    .plot-card h3 {
+      margin: 4px 0 12px;
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.9);
+    }
+
+    .plot-card img {
+      width: 100%;
+      display: block;
+      border-radius: 10px;
+    }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .tool-card {
+      min-height: 190px;
+      padding: 28px 22px;
+      background: rgba(255,255,255,.028);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 16px;
+      text-align: center;
+      transition: .25s ease;
+    }
+
+    .tool-card:hover { transform: translateY(-5px); border-color: rgba(255,43,214,.35); box-shadow: 0 0 30px rgba(255,43,214,.12); }
+    .tool-card .icon { color: var(--pink); text-shadow: 0 0 18px var(--pink); }
+    .tool-card h3 { margin: 0 0 10px; font-size: 1rem; text-transform: uppercase; }
+    .tool-card p { margin: 0; color: var(--muted); line-height: 1.55; font-size: .9rem; }
+
+    .footer-panel {
+      padding: 28px 34px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 30px;
+      align-items: center;
+      margin-bottom: 48px;
+    }
+
+    .footer-logo {
+      width: 88px;
+      opacity: .9;
+      filter: drop-shadow(0 0 18px rgba(0,231,255,.38));
+    }
+
+    .footer-panel h3 { margin: 0 0 8px; }
+    .footer-panel p { margin: 0; color: var(--muted); line-height: 1.55; }
+
+    .reveal { opacity: 0; transform: translateY(36px); transition: .8s cubic-bezier(.22,1,.36,1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+
+
+    /* Hero UI preview sizing fix */
+    .terminal-card {
+      max-width: 620px;
+      justify-self: end;
+    }
+
+    .ui-preview-img {
+      width: 100%;
+      max-height: 430px;
+      object-fit: contain;
+      background: #000;
+      border-bottom: 1px solid rgba(0,231,255,.18);
+    }
+
+    .ui-output-wrap {
+      padding: 16px;
+      background: rgba(0,0,0,.58);
+    }
+
+    .ui-output-wrap img {
+      width: 100%;
+      max-height: 260px;
+      object-fit: contain;
+      border-radius: 12px;
+      border: 1px solid rgba(0,231,255,.18);
+      box-shadow: 0 0 30px rgba(255,43,214,.12);
+      background: #000;
+    }
+
+    .cea-callout {
+      margin-top: 18px;
+      padding: 16px 18px;
+      max-width: 560px;
+      border: 1px solid rgba(0,231,255,.28);
+      border-left: 3px solid var(--pink);
+      border-radius: 14px;
+      background: rgba(0,231,255,.045);
+      color: rgba(255,255,255,.82);
+      line-height: 1.65;
+    }
+
+    .cea-callout strong {
+      color: var(--cyan);
+      text-shadow: 0 0 12px rgba(0,231,255,.6);
+    }
+
+
+
+    /* Clean hero UI preview: no fake app chrome, no title overlap */
+    .terminal-card {
+      max-width: 560px;
+      justify-self: end;
+      border-color: rgba(0, 231, 255, .28);
+      background: rgba(0,0,0,.56);
+    }
+
+    .terminal-top,
+    .stats {
+      display: none !important;
+    }
+
+    .terminal-card img.ui-preview-img {
+      width: 100%;
+      max-height: 520px;
+      object-fit: contain;
+      background: #000;
+      border-bottom: 0;
+      padding: 10px;
+    }
+
+    .title {
+      max-width: 610px;
+      white-space: nowrap;
+    }
+
+    .visual-section {
+      margin-top: 28px;
+    }
+
+    .visual-caption {
+      margin: 18px auto 0;
+      max-width: 780px;
+      color: var(--muted);
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .output-card {
+      margin-top: 24px;
+      background: rgba(0,0,0,.62);
+      border: 1px solid rgba(0, 231, 255, .24);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: inset 0 0 40px rgba(0, 231, 255, .035), 0 0 32px rgba(255,43,214,.08);
+    }
+
+    .output-card img {
+      width: 100%;
+      max-height: 660px;
+      object-fit: contain;
+      display: block;
+      border-radius: 12px;
+      background: #000;
+    }
+
+    @media (max-width: 980px) {
+      .nav-links { display: none; }
+      .hero-panel, .nozzle-grid, .tools-grid, .footer-panel { grid-template-columns: 1fr; }
+      .hero-panel { padding: 36px 22px; }
+      .feature-row { grid-template-columns: 1fr; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 14px; }
+      .jade-bg { width: 95vw; opacity: .08; }
+      .title { font-size: clamp(3.1rem, 16vw, 5.2rem); white-space: normal; }
+      .terminal-card { max-width: 100%; justify-self: stretch; }
+      .ui-preview-img { max-height: 360px; }
+      .ui-output-wrap img { max-height: 240px; }
+    }
+  </style>
 </head>
 <body>
+  <img class="jade-bg" src="assets/jade_rabbit.PNG" alt="" />
 
-<nav class="nav">
-  <div class="nav-inner">
-    <a class="brand" href="index.html">JS</a>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html"><span class="blue">SHOCK</span><span class="pink">WVE</span></a>
+      <div class="nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#modeling">Modeling</a>
+        <a href="#visualization">Visualization</a>
+        <a href="#tools">Tools</a>
+      </div>
+      <a class="btn" href="https://github.com/jasonlanda7/SHOCKWVE/releases" target="_blank" rel="noopener">Download</a>
     </div>
-  </div>
-</nav>
+  </nav>
 
-<!-- HERO -->
-<section class="engine-hero reveal">
-  <div class="container">
-    <h1 class="engine-title">ShockWve</h1>
-    <p class="engine-subtitle">
-      A Python-based nozzle geometry generation platform integrating
-      Method of Characteristics (MOC) and Rao bell design,
-      with simulation-ready contour export.
-    </p>
+  <main>
+    <section class="hero reveal" id="overview">
+      <div class="container hero-panel">
+        <div class="hero-content">
+          <p class="eyebrow">Engine design. Simplified.</p>
+          <h1 class="title"><span class="blue">SHOCK</span><span class="pink">WVE</span></h1>
+          <p class="hero-copy">
+            ShockWve is a custom propulsion software suite that standardizes rocket engine analysis, nozzle contouring, and simulation-ready export. It bridges analytical propulsion modeling with CFD validation workflows.
+          </p>
 
-    <p style="font-weight:600; margin-top:20px;">
-      ShockWve bridges analytical propulsion modeling and high-fidelity CFD validation.
-    </p>
+          <div class="cea-callout">
+            <strong>NASA CEA-ready workflow:</strong> enter chamber temperature, gamma, gas constant, pressure, thrust, and expansion ratio outputs from NASA CEA to move directly from combustion analysis into nozzle contour generation.
+          </div>
 
-    <div style="margin-top:35px;">
-      <a class="btn"
-         href="https://github.com/jasonlanda7/SHOCKWVE/releases"
-         target="_blank"
-         rel="noopener">
-        Download ShockWve (GitHub Releases)
-      </a>
-    </div>
-  </div>
-</section>
+          <div class="feature-row">
+            <div class="mini-feature"><div class="icon">↗</div><strong>Fast</strong><span>Streamlined workflows built for iteration.</span></div>
+            <div class="mini-feature"><div class="icon">⌖</div><strong>Accurate</strong><span>Engineering methods with clear assumptions.</span></div>
+            <div class="mini-feature"><div class="icon">&lt;/&gt;</div><strong>Extensible</strong><span>Python-based architecture for future growth.</span></div>
+          </div>
 
-<!-- PLATFORM OVERVIEW -->
-<section class="engine-step reveal">
-  <div class="container">
-    <h2>Platform Overview</h2>
-    <p>
-      ShockWve is a modular nozzle design environment built to generate
-      smooth, simulation-ready contours from thermodynamic and geometric inputs.
-    </p>
-    <p>
-      It integrates analytical performance modeling, geometric construction,
-      spline smoothing, and structured export within a single workflow.
-    </p>
-  </div>
-</section>
+          <div class="hero-actions">
+            <a class="btn" href="#modeling">View Modeling</a>
+            <a class="btn btn-pink" href="https://github.com/jasonlanda7/SHOCKWVE/releases" target="_blank" rel="noopener">See Releases</a>
+          </div>
+        </div>
 
-<!-- MODELING ENGINES -->
-<section class="engine-step dark reveal">
-  <div class="container">
-    <h2>Dual Nozzle Modeling Engines</h2>
+        <div class="terminal-card">
+          <img class="ui-preview-img" src="assets/shockwve_ui_input_panel.png" alt="ShockWve control core interface with nozzle inputs and Rao Bell preview" />
+        </div>
+      </div>
+    </section>
 
-    <ul>
-      <li><strong>Method of Characteristics (MOC)</strong> for shock-free expansion optimization</li>
-      <li><strong>Rao Bell Nozzle</strong> for compact performance-driven geometry</li>
-    </ul>
+    <section class="reveal" id="modeling">
+      <div class="container section-panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Dual Nozzle Modeling</p>
+            <h2>Compare Rao Bell and MOC contours.</h2>
+          </div>
+          <p>ShockWve supports both compact Rao bell nozzles and Method of Characteristics contours for shock-free expansion studies.</p>
+        </div>
 
-    <p>
-      Both engines compute exit Mach number, expansion ratio,
-      throat/exit radii, thrust consistency, and expansion regime classification.
-    </p>
-  </div>
-</section>
+        <div class="nozzle-grid">
+          <div class="plot-card">
+            <h3>Rao Bell Nozzle (2D)</h3>
+            <img src="assets/rao_bell.png" alt="Rao Bell Nozzle 2D plot" />
+          </div>
+          <div class="plot-card">
+            <h3>Method of Characteristics Nozzle (2D)</h3>
+            <img src="assets/moc.png" alt="MOC Nozzle 2D plot" />
+          </div>
+        </div>
+      </div>
+    </section>
 
-<!-- UI INPUT -->
-<section class="engine-step reveal">
-  <div class="container step-grid">
+    <section class="reveal visual-section" id="visualization">
+      <div class="container section-panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">3D Visualization</p>
+            <h2>Rao Bell output preview.</h2>
+          </div>
+          <p>ShockWve can generate visual outputs for review, including 2D contour plots and 3D wireframe-style nozzle geometry for design checks before export.</p>
+        </div>
+        <div class="output-card">
+          <img src="assets/shockwve_ui_output_results.png" alt="ShockWve output results showing a Rao Bell nozzle 3D visualization" />
+        </div>
+        <p class="visual-caption">
+          The output panel provides a fast visual sanity check for generated nozzle geometry before moving coordinates into CAD, meshing, or CFD workflows.
+        </p>
+      </div>
+    </section>
 
-    <div class="step-text">
-      <h2>Control Core Interface</h2>
+    <section class="reveal" id="tools">
+      <div class="container section-panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Built for Engineers</p>
+            <h2>One workflow from inputs to export.</h2>
+          </div>
+          <p>ShockWve brings thermodynamics, gas dynamics, contour generation, visualization, and export together in one environment.</p>
+        </div>
 
-      <p>
-        The ShockWve control panel provides structured input fields for:
-      </p>
+        <div class="tools-grid">
+          <div class="tool-card"><div class="icon">▤</div><h3>Performance Tools</h3><p>Ideal cycle, real gas, and component analysis.</p></div>
+          <div class="tool-card"><div class="icon">⌁</div><h3>Nozzle Design</h3><p>Rao, MOC, and custom contour capabilities.</p></div>
+          <div class="tool-card"><div class="icon">⌙</div><h3>Visualization</h3><p>Clear plots and exports for reviews.</p></div>
+          <div class="tool-card"><div class="icon">◎</div><h3>Data Management</h3><p>Save, load, and compare engine configurations.</p></div>
+        </div>
+      </div>
+    </section>
 
-      <ul>
-        <li>Chamber pressure (P₀)</li>
-        <li>Chamber temperature (T₀)</li>
-        <li>Specific heat ratio (γ)</li>
-        <li>Ambient and exit pressure</li>
-        <li>Thrust target</li>
-        <li>Geometry shaping exponent</li>
-      </ul>
+    <footer class="container footer-panel reveal">
+      <img class="footer-logo" src="assets/jade_rabbit.PNG" alt="Jade Rabbit logo" />
+      <div>
+        <h3>ShockWve</h3>
+        <p>Custom propulsion software for modern rocket engine development.</p>
+      </div>
+      <a class="btn" href="index.html">Back to Portfolio</a>
+    </footer>
+  </main>
 
-      <p>
-        Inputs are validated before computation to maintain physical consistency.
-      </p>
-    </div>
-
-    <div class="step-image">
-      <img src="assets/shockwve_ui_input_panel.png"
-           alt="ShockWve Control Core Interface">
-    </div>
-
-  </div>
-</section>
-
-<!-- GEOMETRY & RESULTS -->
-<section class="engine-step dark reveal">
-  <div class="container step-grid">
-
-    <div class="step-text">
-      <h2>Contour Generation & Results</h2>
-
-      <p>
-        ShockWve constructs the nozzle geometry using:
-      </p>
-
-      <ul>
-        <li>Power-law convergent section</li>
-        <li>Circular throat blending</li>
-        <li>MOC or Rao divergent profile</li>
-        <li>Global cubic spline smoothing</li>
-      </ul>
-
-      <p>
-        The final contour is resampled at high resolution and prepared
-        for CFD meshing or CAD reconstruction.
-      </p>
-
-      <p>
-        The platform also evaluates mass flow rate, exit Mach number,
-        thrust consistency, and over/under-expanded flow conditions.
-      </p>
-    </div>
-
-    <div class="step-image">
-      <img src="assets/shockwve_ui_output_results.png"
-           alt="ShockWve Contour Generation and Output Results">
-    </div>
-
-  </div>
-</section>
-
-<!-- EXPORT -->
-<section class="engine-step reveal">
-  <div class="container">
-    <h2>Simulation Export Pipeline</h2>
-
-    <p>
-      The generated nozzle contour is exported as structured coordinate data,
-      enabling direct import into:
-    </p>
-
-    <ul>
-      <li>ANSYS Fluent</li>
-      <li>SolidWorks</li>
-      <li>CAD environments</li>
-      <li>Custom meshing workflows</li>
-    </ul>
-
-    <p style="margin-top:30px;">
-      <a class="btn btn-ghost"
-         href="https://github.com/jasonlanda7/SHOCKWVE/releases"
-         target="_blank"
-         rel="noopener">
-        View Source & Releases on GitHub
-      </a>
-    </p>
-
-    <p style="font-weight:600; margin-top:30px;">
-      ShockWve integrates analytical propulsion modeling,
-      geometric construction, and CFD-ready export into a unified design environment.
-    </p>
-  </div>
-</section>
-
-<footer class="engine-footer">
-  <div class="container">
-    <a class="btn" href="index.html">Back to Portfolio</a>
-  </div>
-</footer>
-
-<script>
-  const reveals = document.querySelectorAll(".reveal");
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("active");
-      }
-    });
-  }, { threshold: 0.2 });
-
-  reveals.forEach(el => observer.observe(el));
-</script>
-
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+      });
+    }, { threshold: 0.14 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
