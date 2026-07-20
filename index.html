@@ -6,6 +6,46 @@
   <title>Jason Silva | Propulsion Portfolio</title>
   <meta name="description" content="Jason Silva — Aerospace engineering portfolio focused on propulsion, regenerative cooling, and engine design tools." />
   <link rel="stylesheet" href="style.css" />
+
+<style>
+  /* CFD project card: matches the existing image-card treatment with a purple hue. */
+  .project.cfd {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+      linear-gradient(90deg, rgba(15,12,26,0.94) 0%, rgba(36,18,62,0.82) 48%, rgba(15,12,26,0.58) 100%),
+      url("assets/aerospikemach.png") center 47% / cover no-repeat;
+    border: 1px solid rgba(190,150,255,0.30);
+    box-shadow: 0 22px 65px rgba(124,58,237,0.18);
+  }
+
+  .project.cfd::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba(86,24,145,0.24);
+    mix-blend-mode: color;
+    pointer-events: none;
+  }
+
+  .project.cfd h3,
+  .project.cfd p,
+  .project.cfd .btn {
+    position: relative;
+    z-index: 1;
+  }
+
+  .project.regen{
+    position:relative;overflow:hidden;isolation:isolate;
+    background:linear-gradient(90deg,rgba(15,12,26,.94),rgba(36,18,62,.82),rgba(15,12,26,.58)),
+    url("assets/borealissection.png") center center/cover no-repeat;
+    border:1px solid rgba(190,150,255,.30);
+    box-shadow:0 22px 65px rgba(124,58,237,.18);}
+  .project.regen::before{content:"";position:absolute;inset:0;background:rgba(86,24,145,.24);mix-blend-mode:color;z-index:-1;}
+
+</style>
 </head>
 <body>
 
@@ -139,6 +179,16 @@
   </p>
   <a class="btn" href="shockwve.html">View Full Case Study</a>
 </div>
+
+    <!-- Project 4 -->
+    <div class="card project cfd">
+      <h3>Computational Fluid Dynamics Studies</h3>
+      <p>
+        Reactive-flow, injector, and high-speed plume simulations developed in ANSYS Fluent,
+        including verification-focused studies and ongoing exploratory work.
+      </p>
+      <a class="btn" href="cfd.html">View CFD Case Studies</a>
+    </div>
 
   </div>
 </section>

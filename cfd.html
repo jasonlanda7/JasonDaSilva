@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CFD Studies | Jason Silva</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="CFD case studies in reactive flow, pintle-injector verification, and high-speed propulsion flows." />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    html,
+    body {
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(124,58,237,0.42), transparent 40%),
+        radial-gradient(circle at 80% 0%, rgba(168,85,247,0.32), transparent 42%),
+        #0f0c1a !important;
+    }
+
+    body {
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 22% 12%, rgba(124,58,237,0.42), transparent 38%),
+        radial-gradient(circle at 82% 4%, rgba(168,85,247,0.32), transparent 40%),
+        linear-gradient(to bottom, rgba(15,12,26,0.30), rgba(15,12,26,0.68));
+    }
+
+    .engine-hero,
+    .engine-step {
+      position: relative;
+      z-index: 2;
+      background: rgba(15,12,26,0.46) !important;
+      backdrop-filter: blur(12px) saturate(1.25);
+      -webkit-backdrop-filter: blur(12px) saturate(1.25);
+      border-top: 1px solid rgba(168,85,247,0.22);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .engine-step.dark {
+      background: rgba(44,14,84,0.42) !important;
+    }
+
+    .engine-hero {
+      min-height: 76vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        linear-gradient(90deg, rgba(15,12,26,0.94) 0%, rgba(15,12,26,0.70) 48%, rgba(15,12,26,0.54) 100%),
+        url("assets/cfdfrontpage.png") center / cover no-repeat !important;
+    }
+
+    .engine-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 72% 24%, rgba(168,85,247,0.30), transparent 36%),
+        linear-gradient(to bottom, rgba(15,12,26,0.08), rgba(15,12,26,0.72));
+      pointer-events: none;
+    }
+
+    .engine-hero .container {
+      position: relative;
+      z-index: 2;
+      max-width: 860px;
+    }
+
+    .hero-kicker {
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: rgba(255,255,255,0.65);
+      font-size: 0.78rem;
+      margin-bottom: 16px;
+    }
+
+    .status-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 26px;
+    }
+
+    .status-pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(190,150,255,0.28);
+      background: rgba(124,58,237,0.14);
+      color: rgba(255,255,255,0.82);
+      font-size: 0.82rem;
+    }
+
+    .step-grid {
+      align-items: center;
+    }
+
+    .step-text {
+      z-index: 2;
+      position: relative;
+    }
+
+    .step-text ul {
+      line-height: 1.8;
+      color: rgba(255,255,255,0.78);
+    }
+
+    .step-image img,
+    .step-image video {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 20px;
+      display: block;
+      box-shadow:
+        0 24px 70px rgba(124,58,237,0.22),
+        0 12px 40px rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .media-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .media-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .media-gallery .wide {
+      grid-column: 1 / -1;
+    }
+
+    .media-gallery figure,
+    .media-stack figure {
+      margin: 0;
+    }
+
+    .media-caption {
+      margin: 10px 4px 0;
+      color: rgba(255,255,255,0.58);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .verification-note {
+      margin-top: 22px;
+      padding: 18px 20px;
+      border-left: 3px solid rgba(190,150,255,0.75);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.76);
+      line-height: 1.7;
+    }
+
+
+    .results-table-wrap {
+      margin-top: 24px;
+      overflow-x: auto;
+      border: 1px solid rgba(190,150,255,0.20);
+      border-radius: 16px;
+      background: rgba(5,7,11,0.28);
+    }
+
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 560px;
+      font-size: 0.9rem;
+    }
+
+    .results-table th,
+    .results-table td {
+      padding: 13px 15px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .results-table th {
+      color: rgba(255,255,255,0.92);
+      background: rgba(124,58,237,0.16);
+      font-weight: 650;
+    }
+
+    .results-table td {
+      color: rgba(255,255,255,0.76);
+    }
+
+    .results-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .error-good {
+      color: #d8c4ff !important;
+      font-weight: 700;
+    }
+
+    .setup-line {
+      margin-top: 18px;
+      color: rgba(255,255,255,0.67);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
+    .future-badge {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.68);
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .back-btn-wrap {
+      padding: 55px 0 90px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 3;
+    }
+
+    @media (max-width: 900px) {
+      .step-image video,
+      .step-image img {
+        width: 100%;
+      }
+
+      .engine-hero {
+        min-height: 68vh;
+        background-position: 35% center !important;
+      }
+
+      .media-gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .media-gallery .wide {
+        grid-column: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">JS</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+    </div>
+  </div>
+</nav>
+
+<section class="engine-hero reveal">
+  <div class="container">
+    <p class="hero-kicker">ANSYS Fluent • Reactive Flow • Injector Analysis</p>
+    <h1 class="engine-title">Computational Fluid Dynamics</h1>
+    <p class="engine-subtitle">
+      A collection of propulsion-focused CFD studies covering reacting-flow modeling,
+      injector-flow verification, and high-speed exhaust-plume behavior. Verified results
+      are identified separately from exploratory simulations still under development.
+    </p>
+    <div class="status-row" aria-label="CFD study categories">
+      <span class="status-pill">Species Transport</span>
+      <span class="status-pill">Pintle Injector Verification</span>
+      <span class="status-pill">Compressible Flow</span>
+    </div>
+  </div>
+</section>
+
+<section class="engine-step reveal">
+  <div class="container step-grid">
+    <div class="step-image">
+      <img src="assets/loxrp1species.png" alt="BOREALIS LOX RP-1 Mach-number contour from the species-transport simulation" />
+      <p class="media-caption">Mach-number contour from the BOREALIS LOX/RP-1 species-transport simulation.</p>
+    </div>
+
+    <div class="step-text">
+      <h2>BOREALIS Engine — LOX/RP-1 Species-Transport Validation</h2>
+      <p>
+        This reacting-flow case uses species transport with gaseous RP-1, a non-Sutherland
+        ideal-gas mixing law, the k-&omega; turbulence model, and second-order upwind spatial
+        discretization. The chamber operating point was calibrated to 2.10 MPa and 3020 K.
+      </p>
+      <p>
+        The CFD solution was compared directly with the BOREALIS isentropic and preliminary
+        engine-sizing calculations. The table below shows both the analytical reference values and
+        the calibrated CFD outputs so the reported percent differences are visible rather than presenting
+        the CFD contours by themselves. The strongest agreement was obtained for thrust, with the remaining
+        primary performance quantities generally within about five percent, except exhaust temperature.
+      </p>
+
+      <p class="setup-line">
+        <strong>Model setup:</strong> Species Transport &bull; gaseous RP-1 &bull; non-Sutherland
+        ideal-gas mixing law &bull; k-&omega; &bull; second-order upwind
+      </p>
+
+      <div class="results-table-wrap">
+        <table class="results-table" aria-label="BOREALIS isentropic calculation and CFD verification results">
+          <thead>
+            <tr>
+              <th>Quantity</th>
+              <th>Isentropic / design calculation</th>
+              <th>CFD result</th>
+              <th>Percent error</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Chamber pressure, P<sub>0</sub></td><td>2.10 MPa</td><td>2.10 MPa</td><td class="error-good">0.00%</td></tr>
+            <tr><td>Chamber temperature, T<sub>c</sub></td><td>3020 K</td><td>3020 K</td><td class="error-good">0.00%</td></tr>
+            <tr><td>Exhaust velocity, V<sub>e</sub></td><td>2470.68 m/s</td><td>2364.19 m/s</td><td class="error-good">4.31%</td></tr>
+            <tr><td>Exit Mach number, M<sub>e</sub></td><td>2.566</td><td>2.505</td><td class="error-good">2.36%</td></tr>
+            <tr><td>Total mass flow, ṁ</td><td>1.500 kg/s</td><td>1.567 kg/s</td><td class="error-good">4.47%</td></tr>
+            <tr><td>Exhaust temperature, T<sub>e</sub></td><td>1823.07 K</td><td>1677.22 K</td><td>8.00%</td></tr>
+            <tr><td>Thrust, F</td><td>3691.45 N</td><td>3728.37 N</td><td class="error-good">1.00%</td></tr>
+            <tr><td>Exit pressure, P<sub>e</sub></td><td>101190.39 Pa</td><td>106249.91 Pa</td><td class="error-good">5.00%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="verification-note">
+        <strong>Verification status:</strong> BOREALIS isentropic/design calculations are shown beside
+        the calibrated CFD results at P<sub>0</sub> = 2.10 MPa and T<sub>c</sub> = 3020 K. A formal mesh-independence study can
+        be added later as a separate numerical-uncertainty check.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="engine-step dark reveal">
+  <div class="container step-grid">
+    <div class="step-text">
+      <h2>GOX/Ethanol Pintle Injector — Spray-Angle Verification</h2>
+      <p>
+        The pintle-injector model was developed to verify the predicted spray angle and visualize
+        the interaction between the oxidizer and fuel streams. The simulation combines the flame-
+        temperature field with a streamfunction animation to show both thermal behavior and the
+        underlying flow structure.
+      </p>
+      <p>
+        Verification should be presented using the measured or analytically predicted spray angle,
+        the CFD-extracted angle, and the resulting percent difference. This makes the study the primary
+        validation-focused case on the page rather than presenting contours alone.
+      </p>
+      <ul>
+        <li>GOX/ethanol reacting-flow setup</li>
+        <li>Pintle-sheet interaction and recirculation visualization</li>
+        <li>Spray-angle comparison against the selected reference method</li>
+      </ul>
+      <div class="verification-note">
+        <strong>Verification slot:</strong> add the reference angle, CFD angle, percent error, mesh size,
+        and convergence criterion here once the final values are locked.
+      </div>
+    </div>
+
+    <div class="step-image media-gallery">
+      <figure class="wide">
+        <img src="assets/pintleflametemp.png" alt="GOX ethanol pintle injector flame-temperature contour" />
+        <figcaption class="media-caption">Static-temperature field showing the reacting core and flame development.</figcaption>
+      </figure>
+      <figure class="wide">
+        <video autoplay muted loop playsinline controls preload="metadata">
+          <source src="assets/streamfunction.mp4" type="video/mp4" />
+        </video>
+        <figcaption class="media-caption">Streamfunction animation showing injector recirculation and downstream flow structure.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/goxmassfraction.png" alt="Oxygen mass-fraction contour for the GOX ethanol pintle injector" />
+        <figcaption class="media-caption">O<sub>2</sub> mass fraction.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/ethanolmassfraction.png" alt="Ethanol mass-fraction contour for the GOX ethanol pintle injector" />
+        <figcaption class="media-caption">C<sub>2</sub>H<sub>5</sub>OH mass fraction.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/co2massfraction.png" alt="Carbon-dioxide mass-fraction contour for the GOX ethanol pintle injector" />
+        <figcaption class="media-caption">CO<sub>2</sub> product mass fraction.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/h2omassfraction.png" alt="Water-vapor mass-fraction contour for the GOX ethanol pintle injector" />
+        <figcaption class="media-caption">H<sub>2</sub>O product mass fraction.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="engine-step reveal">
+  <div class="container step-grid">
+    <div class="step-image media-stack">
+      <figure>
+        <img src="assets/aerospikemach.png" alt="Mach-number contour of an aerospike exhaust plume" />
+        <figcaption class="media-caption">Mach-number contour showing the expanding aerospike plume and repeating shock-cell structure.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/aerospikeshlieren.png" alt="Logarithmic streamwise Schlieren visualization of the aerospike exhaust plume" />
+        <figcaption class="media-caption">Logarithmic streamwise Schlieren visualization highlighting compression and expansion waves.</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/aerospikekineticenergy.png" alt="Turbulent kinetic-energy contour of the aerospike exhaust plume" />
+        <figcaption class="media-caption">Turbulent kinetic energy, k, identifying the plume shear layers and downstream mixing region.</figcaption>
+      </figure>
+    </div>
+
+    <div class="step-text">
+      <span class="future-badge">Study 03 • Aerospike Flowfield</span>
+      <h2>Aerospike Exhaust-Plume Study</h2>
+      <p>
+        This compressible-flow study examines the aerospike exhaust plume using Mach number,
+        logarithmic streamwise Schlieren, and turbulent kinetic-energy contours. Together, the fields
+        show the shock-cell pattern, plume-boundary development, and shear-layer mixing downstream of
+        the spike.
+      </p>
+      <p>
+        The current results are presented as a flow-physics study. A future altitude sweep can extend
+        the work by comparing plume adaptation, shock-cell spacing, and base-region behavior over a
+        range of ambient pressures.
+      </p>
+      <ul>
+        <li>Mach-number plume development</li>
+        <li>Schlieren visualization of compression and expansion waves</li>
+        <li>Turbulent kinetic-energy distribution through the shear layers</li>
+        <li>Future altitude and pressure-ratio comparison</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="container back-btn-wrap">
+  <a class="btn" href="index.html">Back to Portfolio</a>
+</div>
+
+<script>
+  const reveals = document.querySelectorAll(".reveal");
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) entry.target.classList.add("active");
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach((el) => observer.observe(el));
+</script>
+
+</body>
+</html>
