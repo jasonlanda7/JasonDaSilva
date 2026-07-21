@@ -381,9 +381,46 @@
       gap: 18px;
     }
 
+    .aerospike-comparison {
+      display: grid;
+      gap: 34px;
+    }
+
+    .contour-pair {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      align-items: start;
+    }
+
+    .contour-pair-heading {
+      grid-column: 1 / -1;
+      margin: 0 0 -4px;
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .pressure-badge {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 5px 9px;
+      border: 1px solid rgba(190,150,255,0.30);
+      border-radius: 999px;
+      background: rgba(124,58,237,0.12);
+      color: rgba(255,255,255,0.78);
+      font-size: 0.72rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
     @media (max-width: 900px) {
-      .aerospike-grid {
+      .aerospike-grid,
+      .contour-pair {
         grid-template-columns: 1fr;
+      }
+
+      .contour-pair-heading {
+        grid-column: auto;
       }
     }
 
@@ -552,7 +589,7 @@
       <div class="media-card">
         <img class="clickable-media" src="assets/loxrp1species.png" alt="BOREALIS LOX RP-1 Mach-number contour from the species-transport simulation" />
         <p class="media-caption">
-          Mach-number contour from the BOREALIS LOX/RP-1 reacting-flow simulation.
+          Velocity contour from the BOREALIS LOX/RP-1 reacting-flow simulation.
         </p>
       </div>
 
@@ -689,39 +726,78 @@
         <h2>Aerospike Exhaust-Plume Study</h2>
         <p>
           This study examines the external expansion of an aerospike exhaust plume using
-          Mach number, logarithmic Schlieren, and turbulent kinetic-energy visualizations.
+          Mach-number, logarithmic Schlieren, and turbulent kinetic-energy visualizations.
+          Two operating conditions are compared by increasing the chamber pressure from
+          approximately 2 MPa to approximately 3 MPa.
         </p>
         <p>
-          Together, the fields show the repeating shock-cell structure, plume-boundary growth,
-          compression and expansion waves, and the development of the downstream shear layers.
+          The higher-pressure case produces a stronger under-expanded plume, more pronounced
+          shock-cell structures, and a longer high-velocity core. The corresponding Schlieren
+          field shows sharper compression and expansion waves, while the turbulent kinetic-energy
+          field highlights the increased mixing intensity along the plume shear layers.
         </p>
         <ul>
-          <li>Mach-number plume development</li>
-          <li>Schlieren visualization of wave structure</li>
-          <li>Turbulent kinetic-energy distribution</li>
-          <li>Future ambient-pressure and altitude sweep</li>
+          <li>Direct 2 MPa and 3 MPa comparison for each contour type</li>
+          <li>Mach-number plume development and high-speed core length</li>
+          <li>Schlieren visualization of compression and expansion waves</li>
+          <li>Turbulent kinetic-energy distribution and downstream mixing</li>
         </ul>
         <div class="verification-note">
-          <strong>Current status:</strong> flow-physics study. Future work can compare shock-cell
-          spacing and plume adaptation across multiple nozzle pressure ratios.
+          <strong>Pressure comparison:</strong> increasing chamber pressure from approximately
+          2 MPa to 3 MPa strengthens the under-expanded plume and makes the shock-cell pattern
+          more distinct. The paired layout below keeps each 3 MPa result beside the matching
+          2 MPa contour for direct comparison.
         </div>
       </div>
 
-      <div class="aerospike-grid">
-        <figure class="media-card">
-          <img class="clickable-media" src="assets/aerospikemach.png" alt="Mach-number contour of an aerospike exhaust plume" />
-          <figcaption class="media-caption">Mach-number contour showing plume expansion and repeating shock cells.</figcaption>
-        </figure>
+      <div class="aerospike-comparison">
+        <div class="contour-pair">
+          <h3 class="contour-pair-heading">Mach Number</h3>
 
-        <figure class="media-card">
-          <img class="clickable-media" src="assets/aerospikeshlieren.png" alt="Schlieren visualization of an aerospike exhaust plume" />
-          <figcaption class="media-caption">Logarithmic streamwise Schlieren field highlighting compression and expansion waves.</figcaption>
-        </figure>
+          <figure class="media-card">
+            <span class="pressure-badge">Chamber pressure ≈ 2 MPa</span>
+            <img class="clickable-media" src="assets/aerospikemach.png" alt="Mach-number contour of the aerospike exhaust plume at approximately 2 MPa chamber pressure" />
+            <figcaption class="media-caption">Baseline Mach-number contour showing plume expansion and repeating shock cells at approximately 2 MPa.</figcaption>
+          </figure>
 
-        <figure class="media-card">
-          <img class="clickable-media" src="assets/aerospikekineticenergy.png" alt="Turbulent kinetic-energy contour of an aerospike exhaust plume" />
-          <figcaption class="media-caption">Turbulent kinetic energy identifying plume shear layers and the downstream mixing region.</figcaption>
-        </figure>
+          <figure class="media-card">
+            <span class="pressure-badge">Chamber pressure ≈ 3 MPa</span>
+            <img class="clickable-media" src="assets/aerospikemachnumber2.png" alt="Mach-number contour of the aerospike exhaust plume at approximately 3 MPa chamber pressure" />
+            <figcaption class="media-caption">Higher-pressure Mach-number contour showing a stronger under-expanded plume and a longer high-speed core.</figcaption>
+          </figure>
+        </div>
+
+        <div class="contour-pair">
+          <h3 class="contour-pair-heading">Logarithmic Streamwise Schlieren</h3>
+
+          <figure class="media-card">
+            <span class="pressure-badge">Chamber pressure ≈ 2 MPa</span>
+            <img class="clickable-media" src="assets/aerospikeshclieren-3mpa.png" alt="Logarithmic streamwise Schlieren contour of the aerospike exhaust plume at approximately 2 MPa chamber pressure" />
+            <figcaption class="media-caption">Baseline Schlieren field highlighting the compression and expansion-wave structure at approximately 2 MPa.</figcaption>
+          </figure>
+
+          <figure class="media-card">
+            <span class="pressure-badge">Chamber pressure ≈ 3 MPa</span>
+            <img class="clickable-media" src="assets/aerospikeshlieren.png" alt="Logarithmic streamwise Schlieren contour of the aerospike exhaust plume at approximately 3 MPa chamber pressure" />
+            <figcaption class="media-caption">At approximately 3 MPa, the shock diamonds and wave interactions become sharper and more pronounced.</figcaption>
+          </figure>
+        </div>
+
+        <div class="contour-pair">
+          <h3 class="contour-pair-heading">Turbulent Kinetic Energy</h3>
+
+          <figure class="media-card">
+            <span class="pressure-badge">Chamber pressure ≈ 2 MPa</span>
+            <img class="clickable-media" src="assets/aerospikekineticenergy.png" alt="Turbulent kinetic-energy contour of the aerospike exhaust plume at approximately 2 MPa chamber pressure" />
+            <figcaption class="media-caption">Baseline turbulent kinetic-energy distribution showing plume shear-layer development and downstream mixing.</figcaption>
+          </figure>
+
+          <figure class="media-card">
+            <span class="pressure-badge">Chamber pressure ≈ 3 MPa</span>
+            <img class="clickable-media" src="assets/turbulentkineticspike.png" alt="Turbulent kinetic-energy contour of the aerospike exhaust plume at approximately 3 MPa chamber pressure" />
+            <figcaption class="media-caption">The 3 MPa case shows stronger turbulent mixing along the plume boundaries due to the increased exhaust momentum.</figcaption>
+          </figure>
+        </div>
       </div>
     </div>
   </section>
