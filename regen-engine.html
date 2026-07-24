@@ -510,6 +510,95 @@
       }
     }
 
+  
+
+    /* Interactive NASA CEA carpet plot */
+    .cea-plot-shell {
+      position: relative;
+      width: min(100%, 680px);
+      aspect-ratio: 1 / 1;
+      min-height: 0;
+      height: auto;
+      justify-self: center;
+      overflow: hidden;
+      border-radius: 20px;
+      border: 1px solid rgba(190,150,255,0.34);
+      background: #0b0f19;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.38);
+    }
+
+    .cea-plot-frame {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      border: 0;
+      background: #0b0f19;
+      touch-action: manipulation;
+    }
+
+    .cea-plot-label {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      right: 14px;
+      z-index: 2;
+      margin: 0;
+      color: rgba(255,255,255,0.92);
+      font-size: clamp(0.78rem, 1.6vw, 0.95rem);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-align: center;
+      pointer-events: none;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.85);
+    }
+
+    .cea-plot-hint {
+      position: absolute;
+      left: 14px;
+      bottom: 12px;
+      z-index: 2;
+      margin: 0;
+      padding: 8px 11px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 999px;
+      color: rgba(255,255,255,0.78);
+      background: rgba(5,7,11,0.72);
+      backdrop-filter: blur(8px);
+      font-size: 0.78rem;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    @media (max-width: 760px) {
+      .cea-plot-shell {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        min-height: 0;
+        height: auto;
+        max-height: none;
+        border-radius: 16px;
+      }
+
+      .cea-plot-label {
+        top: 9px;
+        left: 10px;
+        right: 10px;
+        font-size: 0.76rem;
+      }
+
+      .cea-plot-hint {
+        left: 50%;
+        bottom: 9px;
+        transform: translateX(-50%);
+        width: max-content;
+        max-width: calc(100% - 20px);
+        font-size: 0.67rem;
+        white-space: nowrap;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -667,19 +756,465 @@
       <h2>Step 2 — NASA CEA Performance Modeling</h2>
       <p>
         After ideal approximations, NASA CEA was used to incorporate
-        chemical equilibrium and real combustion effects.
+        chemical equilibrium and real combustion effects. Using a matlab, a carpet plot called the "Combustion Performance Carpet Plot" is generated which showcases the given O/F and Chosen chamber pressures Pc as functions of Isp, chamber temperature, and C*. This allowed us to visualize to performance trends across a wide range of given O/F Ratios and chamber pressures.
       </p>
       <p>
         Chamber temperature, gamma, molecular weight, and gas composition were evaluated
         across the selected LOX / RP-1 operating point.
       </p>
       <p>
-        This refined thermodynamic properties used in contour generation and cooling analysis.
+        The interactive LOX–kerosene carpet plot maps performance trends across mixture ratio and chamber pressure, refining the thermodynamic properties used in contour generation and cooling analysis.
       </p>
     </div>
 
-    <div class="step-image">
-      <img src="assets/cea_performance_carpet.png" alt="NASA CEA Performance Carpet Plot">
+    <div class="step-image cea-plot-shell" aria-label="Interactive NASA CEA LOX-kerosene performance carpet plot">
+      <iframe
+        class="cea-plot-frame"
+        title="Interactive 3D NASA CEA LOX-kerosene performance carpet plot"
+        loading="lazy"
+        sandbox="allow-scripts allow-same-origin"
+        srcdoc="&lt;html&gt;&lt;head&gt;
+&lt;script src=&quot;https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js&quot;&gt;&lt;/script&gt;
+&lt;style&gt;html,body{width:100%;height:100%;background:#0b0f19;color:#e5e7eb;font-family:Arial;margin:0;padding:0;overflow:hidden;} h2{display:none;} #plot{width:100%!important;height:100vh!important;}&lt;/style&gt;
+&lt;/head&gt;&lt;body&gt;
+&lt;div id=&quot;plot&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+var data = [];
+data.push({
+type: &quot;scatter3d&quot;,
+x: [1471.760000,1562.380000,1738.350000,2009.970000,2260.280000,2486.050000,2684.680000,2855.220000,2998.400000,3115.820000,3209.510000,3282.090000,3336.780000,3377.010000,3405.990000,3426.380000,3440.260000,3449.210000,3454.370000,3456.610000,3456.580000,3454.730000,3451.450000,3447.010000,3441.620000,3435.460000,],
+y: [185.751505,189.973130,195.367429,204.830396,213.956856,221.472164,227.600659,232.566677,236.512978,239.541536,241.744123,243.202317,243.977301,244.160850,243.865132,243.202317,242.304967,241.234265,240.071788,238.858326,237.614272,236.370218,235.136362,233.902505,232.699240,231.506172,],
+z: [1355.600000,1388.700000,1439.700000,1521.400000,1588.200000,1642.600000,1686.400000,1720.700000,1746.400000,1764.500000,1775.900000,1781.700000,1782.700000,1780.100000,1774.900000,1767.900000,1759.900000,1751.200000,1742.100000,1732.800000,1723.500000,1714.200000,1705.000000,1696.000000,1687.200000,1678.500000,],
+mode: &quot;lines+markers&quot;,
+name: &quot;Pc = 200 psi&quot;,
+marker: {size: 4},
+line: {width: 5},
+text: [&quot;O/F = 1.00&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 1471.76 K&lt;br&gt;Isp = 185.75 s&lt;br&gt;c* = 1355.60 m/s&quot;,&quot;O/F = 1.10&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 1562.38 K&lt;br&gt;Isp = 189.97 s&lt;br&gt;c* = 1388.70 m/s&quot;,&quot;O/F = 1.20&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 1738.35 K&lt;br&gt;Isp = 195.37 s&lt;br&gt;c* = 1439.70 m/s&quot;,&quot;O/F = 1.30&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 2009.97 K&lt;br&gt;Isp = 204.83 s&lt;br&gt;c* = 1521.40 m/s&quot;,&quot;O/F = 1.40&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 2260.28 K&lt;br&gt;Isp = 213.96 s&lt;br&gt;c* = 1588.20 m/s&quot;,&quot;O/F = 1.50&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 2486.05 K&lt;br&gt;Isp = 221.47 s&lt;br&gt;c* = 1642.60 m/s&quot;,&quot;O/F = 1.60&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 2684.68 K&lt;br&gt;Isp = 227.60 s&lt;br&gt;c* = 1686.40 m/s&quot;,&quot;O/F = 1.70&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 2855.22 K&lt;br&gt;Isp = 232.57 s&lt;br&gt;c* = 1720.70 m/s&quot;,&quot;O/F = 1.80&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 2998.40 K&lt;br&gt;Isp = 236.51 s&lt;br&gt;c* = 1746.40 m/s&quot;,&quot;O/F = 1.90&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3115.82 K&lt;br&gt;Isp = 239.54 s&lt;br&gt;c* = 1764.50 m/s&quot;,&quot;O/F = 2.00&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3209.51 K&lt;br&gt;Isp = 241.74 s&lt;br&gt;c* = 1775.90 m/s&quot;,&quot;O/F = 2.10&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3282.09 K&lt;br&gt;Isp = 243.20 s&lt;br&gt;c* = 1781.70 m/s&quot;,&quot;O/F = 2.20&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3336.78 K&lt;br&gt;Isp = 243.98 s&lt;br&gt;c* = 1782.70 m/s&quot;,&quot;O/F = 2.30&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3377.01 K&lt;br&gt;Isp = 244.16 s&lt;br&gt;c* = 1780.10 m/s&quot;,&quot;O/F = 2.40&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3405.99 K&lt;br&gt;Isp = 243.87 s&lt;br&gt;c* = 1774.90 m/s&quot;,&quot;O/F = 2.50&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3426.38 K&lt;br&gt;Isp = 243.20 s&lt;br&gt;c* = 1767.90 m/s&quot;,&quot;O/F = 2.60&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3440.26 K&lt;br&gt;Isp = 242.30 s&lt;br&gt;c* = 1759.90 m/s&quot;,&quot;O/F = 2.70&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3449.21 K&lt;br&gt;Isp = 241.23 s&lt;br&gt;c* = 1751.20 m/s&quot;,&quot;O/F = 2.80&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3454.37 K&lt;br&gt;Isp = 240.07 s&lt;br&gt;c* = 1742.10 m/s&quot;,&quot;O/F = 2.90&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3456.61 K&lt;br&gt;Isp = 238.86 s&lt;br&gt;c* = 1732.80 m/s&quot;,&quot;O/F = 3.00&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3456.58 K&lt;br&gt;Isp = 237.61 s&lt;br&gt;c* = 1723.50 m/s&quot;,&quot;O/F = 3.10&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3454.73 K&lt;br&gt;Isp = 236.37 s&lt;br&gt;c* = 1714.20 m/s&quot;,&quot;O/F = 3.20&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3451.45 K&lt;br&gt;Isp = 235.14 s&lt;br&gt;c* = 1705.00 m/s&quot;,&quot;O/F = 3.30&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3447.01 K&lt;br&gt;Isp = 233.90 s&lt;br&gt;c* = 1696.00 m/s&quot;,&quot;O/F = 3.40&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3441.62 K&lt;br&gt;Isp = 232.70 s&lt;br&gt;c* = 1687.20 m/s&quot;,&quot;O/F = 3.50&lt;br&gt;Pc = 200 psi&lt;br&gt;Tc = 3435.46 K&lt;br&gt;Isp = 231.51 s&lt;br&gt;c* = 1678.50 m/s&quot;],
+hoverinfo: &quot;text&quot;
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [1475.950000,1565.300000,1738.630000,2010.060000,2260.660000,2487.080000,2686.780000,2858.730000,3003.510000,3122.570000,3217.840000,3291.830000,3347.690000,3388.850000,3418.530000,3439.440000,3453.690000,3462.890000,3468.220000,3470.570000,3470.580000,3468.750000,3465.460000,3460.970000,3455.530000,3449.290000,],
+y: [188.718880,192.930307,198.243029,207.542841,216.781470,224.439538,230.700596,235.788980,239.857648,243.018768,245.343721,246.914084,247.791040,248.066363,247.842026,247.230196,246.343043,245.282538,244.120061,242.896402,241.642151,240.377703,239.123452,237.879398,236.645542,235.442276,],
+z: [1357.200000,1390.100000,1440.000000,1521.400000,1588.200000,1642.600000,1686.500000,1720.900000,1746.900000,1765.300000,1777.000000,1783.000000,1784.200000,1781.800000,1776.800000,1769.900000,1761.900000,1753.200000,1744.200000,1734.900000,1725.600000,1716.300000,1707.200000,1698.100000,1689.300000,1680.600000,],
+mode: &quot;lines+markers&quot;,
+name: &quot;Pc = 220 psi&quot;,
+marker: {size: 4},
+line: {width: 5},
+text: [&quot;O/F = 1.00&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 1475.95 K&lt;br&gt;Isp = 188.72 s&lt;br&gt;c* = 1357.20 m/s&quot;,&quot;O/F = 1.10&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 1565.30 K&lt;br&gt;Isp = 192.93 s&lt;br&gt;c* = 1390.10 m/s&quot;,&quot;O/F = 1.20&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 1738.63 K&lt;br&gt;Isp = 198.24 s&lt;br&gt;c* = 1440.00 m/s&quot;,&quot;O/F = 1.30&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 2010.06 K&lt;br&gt;Isp = 207.54 s&lt;br&gt;c* = 1521.40 m/s&quot;,&quot;O/F = 1.40&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 2260.66 K&lt;br&gt;Isp = 216.78 s&lt;br&gt;c* = 1588.20 m/s&quot;,&quot;O/F = 1.50&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 2487.08 K&lt;br&gt;Isp = 224.44 s&lt;br&gt;c* = 1642.60 m/s&quot;,&quot;O/F = 1.60&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 2686.78 K&lt;br&gt;Isp = 230.70 s&lt;br&gt;c* = 1686.50 m/s&quot;,&quot;O/F = 1.70&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 2858.73 K&lt;br&gt;Isp = 235.79 s&lt;br&gt;c* = 1720.90 m/s&quot;,&quot;O/F = 1.80&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3003.51 K&lt;br&gt;Isp = 239.86 s&lt;br&gt;c* = 1746.90 m/s&quot;,&quot;O/F = 1.90&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3122.57 K&lt;br&gt;Isp = 243.02 s&lt;br&gt;c* = 1765.30 m/s&quot;,&quot;O/F = 2.00&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3217.84 K&lt;br&gt;Isp = 245.34 s&lt;br&gt;c* = 1777.00 m/s&quot;,&quot;O/F = 2.10&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3291.83 K&lt;br&gt;Isp = 246.91 s&lt;br&gt;c* = 1783.00 m/s&quot;,&quot;O/F = 2.20&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3347.69 K&lt;br&gt;Isp = 247.79 s&lt;br&gt;c* = 1784.20 m/s&quot;,&quot;O/F = 2.30&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3388.85 K&lt;br&gt;Isp = 248.07 s&lt;br&gt;c* = 1781.80 m/s&quot;,&quot;O/F = 2.40&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3418.53 K&lt;br&gt;Isp = 247.84 s&lt;br&gt;c* = 1776.80 m/s&quot;,&quot;O/F = 2.50&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3439.44 K&lt;br&gt;Isp = 247.23 s&lt;br&gt;c* = 1769.90 m/s&quot;,&quot;O/F = 2.60&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3453.69 K&lt;br&gt;Isp = 246.34 s&lt;br&gt;c* = 1761.90 m/s&quot;,&quot;O/F = 2.70&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3462.89 K&lt;br&gt;Isp = 245.28 s&lt;br&gt;c* = 1753.20 m/s&quot;,&quot;O/F = 2.80&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3468.22 K&lt;br&gt;Isp = 244.12 s&lt;br&gt;c* = 1744.20 m/s&quot;,&quot;O/F = 2.90&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3470.57 K&lt;br&gt;Isp = 242.90 s&lt;br&gt;c* = 1734.90 m/s&quot;,&quot;O/F = 3.00&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3470.58 K&lt;br&gt;Isp = 241.64 s&lt;br&gt;c* = 1725.60 m/s&quot;,&quot;O/F = 3.10&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3468.75 K&lt;br&gt;Isp = 240.38 s&lt;br&gt;c* = 1716.30 m/s&quot;,&quot;O/F = 3.20&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3465.46 K&lt;br&gt;Isp = 239.12 s&lt;br&gt;c* = 1707.20 m/s&quot;,&quot;O/F = 3.30&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3460.97 K&lt;br&gt;Isp = 237.88 s&lt;br&gt;c* = 1698.10 m/s&quot;,&quot;O/F = 3.40&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3455.53 K&lt;br&gt;Isp = 236.65 s&lt;br&gt;c* = 1689.30 m/s&quot;,&quot;O/F = 3.50&lt;br&gt;Pc = 220 psi&lt;br&gt;Tc = 3449.29 K&lt;br&gt;Isp = 235.44 s&lt;br&gt;c* = 1680.60 m/s&quot;],
+hoverinfo: &quot;text&quot;
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [1479.930000,1568.120000,1738.930000,2010.150000,2260.980000,2487.980000,2688.640000,2861.860000,3008.090000,3128.650000,3225.370000,3300.660000,3357.620000,3399.650000,3429.990000,3451.380000,3465.980000,3475.420000,3480.910000,3483.350000,3483.420000,3481.600000,3478.290000,3473.770000,3468.270000,3461.970000,],
+y: [191.370142,195.581570,200.812714,209.959568,219.279774,227.060209,233.443633,238.644185,242.825022,246.088114,248.525235,250.197570,251.176498,251.543595,251.380441,250.809400,249.952838,248.902530,247.740054,246.506197,245.241749,243.967104,242.692459,241.428011,240.183957,238.960297,],
+z: [1358.700000,1391.400000,1440.400000,1521.400000,1588.200000,1642.600000,1686.500000,1721.100000,1747.300000,1765.900000,1777.900000,1784.200000,1785.600000,1783.400000,1778.500000,1771.700000,1763.800000,1755.100000,1746.100000,1736.800000,1727.500000,1718.200000,1709.100000,1700.000000,1691.200000,1682.500000,],
+mode: &quot;lines+markers&quot;,
+name: &quot;Pc = 240 psi&quot;,
+marker: {size: 4},
+line: {width: 5},
+text: [&quot;O/F = 1.00&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 1479.93 K&lt;br&gt;Isp = 191.37 s&lt;br&gt;c* = 1358.70 m/s&quot;,&quot;O/F = 1.10&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 1568.12 K&lt;br&gt;Isp = 195.58 s&lt;br&gt;c* = 1391.40 m/s&quot;,&quot;O/F = 1.20&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 1738.93 K&lt;br&gt;Isp = 200.81 s&lt;br&gt;c* = 1440.40 m/s&quot;,&quot;O/F = 1.30&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 2010.15 K&lt;br&gt;Isp = 209.96 s&lt;br&gt;c* = 1521.40 m/s&quot;,&quot;O/F = 1.40&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 2260.98 K&lt;br&gt;Isp = 219.28 s&lt;br&gt;c* = 1588.20 m/s&quot;,&quot;O/F = 1.50&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 2487.98 K&lt;br&gt;Isp = 227.06 s&lt;br&gt;c* = 1642.60 m/s&quot;,&quot;O/F = 1.60&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 2688.64 K&lt;br&gt;Isp = 233.44 s&lt;br&gt;c* = 1686.50 m/s&quot;,&quot;O/F = 1.70&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 2861.86 K&lt;br&gt;Isp = 238.64 s&lt;br&gt;c* = 1721.10 m/s&quot;,&quot;O/F = 1.80&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3008.09 K&lt;br&gt;Isp = 242.83 s&lt;br&gt;c* = 1747.30 m/s&quot;,&quot;O/F = 1.90&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3128.65 K&lt;br&gt;Isp = 246.09 s&lt;br&gt;c* = 1765.90 m/s&quot;,&quot;O/F = 2.00&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3225.37 K&lt;br&gt;Isp = 248.53 s&lt;br&gt;c* = 1777.90 m/s&quot;,&quot;O/F = 2.10&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3300.66 K&lt;br&gt;Isp = 250.20 s&lt;br&gt;c* = 1784.20 m/s&quot;,&quot;O/F = 2.20&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3357.62 K&lt;br&gt;Isp = 251.18 s&lt;br&gt;c* = 1785.60 m/s&quot;,&quot;O/F = 2.30&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3399.65 K&lt;br&gt;Isp = 251.54 s&lt;br&gt;c* = 1783.40 m/s&quot;,&quot;O/F = 2.40&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3429.99 K&lt;br&gt;Isp = 251.38 s&lt;br&gt;c* = 1778.50 m/s&quot;,&quot;O/F = 2.50&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3451.38 K&lt;br&gt;Isp = 250.81 s&lt;br&gt;c* = 1771.70 m/s&quot;,&quot;O/F = 2.60&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3465.98 K&lt;br&gt;Isp = 249.95 s&lt;br&gt;c* = 1763.80 m/s&quot;,&quot;O/F = 2.70&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3475.42 K&lt;br&gt;Isp = 248.90 s&lt;br&gt;c* = 1755.10 m/s&quot;,&quot;O/F = 2.80&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3480.91 K&lt;br&gt;Isp = 247.74 s&lt;br&gt;c* = 1746.10 m/s&quot;,&quot;O/F = 2.90&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3483.35 K&lt;br&gt;Isp = 246.51 s&lt;br&gt;c* = 1736.80 m/s&quot;,&quot;O/F = 3.00&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3483.42 K&lt;br&gt;Isp = 245.24 s&lt;br&gt;c* = 1727.50 m/s&quot;,&quot;O/F = 3.10&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3481.60 K&lt;br&gt;Isp = 243.97 s&lt;br&gt;c* = 1718.20 m/s&quot;,&quot;O/F = 3.20&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3478.29 K&lt;br&gt;Isp = 242.69 s&lt;br&gt;c* = 1709.10 m/s&quot;,&quot;O/F = 3.30&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3473.77 K&lt;br&gt;Isp = 241.43 s&lt;br&gt;c* = 1700.00 m/s&quot;,&quot;O/F = 3.40&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3468.27 K&lt;br&gt;Isp = 240.18 s&lt;br&gt;c* = 1691.20 m/s&quot;,&quot;O/F = 3.50&lt;br&gt;Pc = 240 psi&lt;br&gt;Tc = 3461.97 K&lt;br&gt;Isp = 238.96 s&lt;br&gt;c* = 1682.50 m/s&quot;],
+hoverinfo: &quot;text&quot;
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [1483.720000,1570.840000,1739.260000,2010.230000,2261.270000,2488.780000,2690.310000,2864.670000,3012.220000,3134.170000,3232.220000,3308.730000,3366.720000,3409.570000,3440.530000,3462.380000,3477.310000,3486.970000,3492.620000,3495.150000,3495.270000,3493.470000,3490.140000,3485.590000,3480.040000,3473.670000,],
+y: [193.766475,197.977903,203.147864,212.141761,221.512953,229.405556,235.890952,241.193476,245.466087,248.831150,251.370244,253.144550,254.215252,254.653730,254.561955,254.041900,253.205733,252.165622,251.003146,249.769289,248.494644,247.199604,245.914762,244.640117,243.375669,242.131615,],
+z: [1360.100000,1392.600000,1440.700000,1521.400000,1588.200000,1642.600000,1686.600000,1721.300000,1747.700000,1766.500000,1778.800000,1785.200000,1786.900000,1784.900000,1780.100000,1773.400000,1765.500000,1756.900000,1747.900000,1738.600000,1729.300000,1720.000000,1710.800000,1701.800000,1692.900000,1684.200000,],
+mode: &quot;lines+markers&quot;,
+name: &quot;Pc = 260 psi&quot;,
+marker: {size: 4},
+line: {width: 5},
+text: [&quot;O/F = 1.00&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 1483.72 K&lt;br&gt;Isp = 193.77 s&lt;br&gt;c* = 1360.10 m/s&quot;,&quot;O/F = 1.10&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 1570.84 K&lt;br&gt;Isp = 197.98 s&lt;br&gt;c* = 1392.60 m/s&quot;,&quot;O/F = 1.20&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 1739.26 K&lt;br&gt;Isp = 203.15 s&lt;br&gt;c* = 1440.70 m/s&quot;,&quot;O/F = 1.30&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 2010.23 K&lt;br&gt;Isp = 212.14 s&lt;br&gt;c* = 1521.40 m/s&quot;,&quot;O/F = 1.40&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 2261.27 K&lt;br&gt;Isp = 221.51 s&lt;br&gt;c* = 1588.20 m/s&quot;,&quot;O/F = 1.50&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 2488.78 K&lt;br&gt;Isp = 229.41 s&lt;br&gt;c* = 1642.60 m/s&quot;,&quot;O/F = 1.60&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 2690.31 K&lt;br&gt;Isp = 235.89 s&lt;br&gt;c* = 1686.60 m/s&quot;,&quot;O/F = 1.70&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 2864.67 K&lt;br&gt;Isp = 241.19 s&lt;br&gt;c* = 1721.30 m/s&quot;,&quot;O/F = 1.80&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3012.22 K&lt;br&gt;Isp = 245.47 s&lt;br&gt;c* = 1747.70 m/s&quot;,&quot;O/F = 1.90&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3134.17 K&lt;br&gt;Isp = 248.83 s&lt;br&gt;c* = 1766.50 m/s&quot;,&quot;O/F = 2.00&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3232.22 K&lt;br&gt;Isp = 251.37 s&lt;br&gt;c* = 1778.80 m/s&quot;,&quot;O/F = 2.10&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3308.73 K&lt;br&gt;Isp = 253.14 s&lt;br&gt;c* = 1785.20 m/s&quot;,&quot;O/F = 2.20&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3366.72 K&lt;br&gt;Isp = 254.22 s&lt;br&gt;c* = 1786.90 m/s&quot;,&quot;O/F = 2.30&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3409.57 K&lt;br&gt;Isp = 254.65 s&lt;br&gt;c* = 1784.90 m/s&quot;,&quot;O/F = 2.40&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3440.53 K&lt;br&gt;Isp = 254.56 s&lt;br&gt;c* = 1780.10 m/s&quot;,&quot;O/F = 2.50&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3462.38 K&lt;br&gt;Isp = 254.04 s&lt;br&gt;c* = 1773.40 m/s&quot;,&quot;O/F = 2.60&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3477.31 K&lt;br&gt;Isp = 253.21 s&lt;br&gt;c* = 1765.50 m/s&quot;,&quot;O/F = 2.70&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3486.97 K&lt;br&gt;Isp = 252.17 s&lt;br&gt;c* = 1756.90 m/s&quot;,&quot;O/F = 2.80&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3492.62 K&lt;br&gt;Isp = 251.00 s&lt;br&gt;c* = 1747.90 m/s&quot;,&quot;O/F = 2.90&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3495.15 K&lt;br&gt;Isp = 249.77 s&lt;br&gt;c* = 1738.60 m/s&quot;,&quot;O/F = 3.00&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3495.27 K&lt;br&gt;Isp = 248.49 s&lt;br&gt;c* = 1729.30 m/s&quot;,&quot;O/F = 3.10&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3493.47 K&lt;br&gt;Isp = 247.20 s&lt;br&gt;c* = 1720.00 m/s&quot;,&quot;O/F = 3.20&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3490.14 K&lt;br&gt;Isp = 245.91 s&lt;br&gt;c* = 1710.80 m/s&quot;,&quot;O/F = 3.30&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3485.59 K&lt;br&gt;Isp = 244.64 s&lt;br&gt;c* = 1701.80 m/s&quot;,&quot;O/F = 3.40&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3480.04 K&lt;br&gt;Isp = 243.38 s&lt;br&gt;c* = 1692.90 m/s&quot;,&quot;O/F = 3.50&lt;br&gt;Pc = 260 psi&lt;br&gt;Tc = 3473.67 K&lt;br&gt;Isp = 242.13 s&lt;br&gt;c* = 1684.20 m/s&quot;],
+hoverinfo: &quot;text&quot;
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [1487.340000,1573.480000,1739.600000,2010.300000,2261.530000,2489.500000,2691.800000,2867.220000,3015.990000,3139.210000,3238.520000,3316.170000,3375.120000,3418.740000,3450.290000,3472.580000,3487.810000,3497.700000,3503.480000,3506.110000,3506.270000,3504.480000,3501.150000,3496.570000,3490.970000,3484.540000,],
+y: [195.948667,200.160095,205.279071,214.120010,223.531991,231.516369,238.093539,243.487837,247.852223,251.309061,253.939929,255.806009,256.958289,257.478344,257.447752,256.968486,256.162910,255.132996,253.970520,252.736663,251.451821,250.156781,248.851545,247.556505,246.281860,245.027609,],
+z: [1361.400000,1393.800000,1441.100000,1521.400000,1588.200000,1642.600000,1686.600000,1721.500000,1748.000000,1767.100000,1779.500000,1786.200000,1788.100000,1786.200000,1781.500000,1774.900000,1767.100000,1758.500000,1749.500000,1740.200000,1730.900000,1721.700000,1712.500000,1703.400000,1694.500000,1685.800000,],
+mode: &quot;lines+markers&quot;,
+name: &quot;Pc = 280 psi&quot;,
+marker: {size: 4},
+line: {width: 5},
+text: [&quot;O/F = 1.00&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 1487.34 K&lt;br&gt;Isp = 195.95 s&lt;br&gt;c* = 1361.40 m/s&quot;,&quot;O/F = 1.10&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 1573.48 K&lt;br&gt;Isp = 200.16 s&lt;br&gt;c* = 1393.80 m/s&quot;,&quot;O/F = 1.20&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 1739.60 K&lt;br&gt;Isp = 205.28 s&lt;br&gt;c* = 1441.10 m/s&quot;,&quot;O/F = 1.30&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 2010.30 K&lt;br&gt;Isp = 214.12 s&lt;br&gt;c* = 1521.40 m/s&quot;,&quot;O/F = 1.40&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 2261.53 K&lt;br&gt;Isp = 223.53 s&lt;br&gt;c* = 1588.20 m/s&quot;,&quot;O/F = 1.50&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 2489.50 K&lt;br&gt;Isp = 231.52 s&lt;br&gt;c* = 1642.60 m/s&quot;,&quot;O/F = 1.60&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 2691.80 K&lt;br&gt;Isp = 238.09 s&lt;br&gt;c* = 1686.60 m/s&quot;,&quot;O/F = 1.70&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 2867.22 K&lt;br&gt;Isp = 243.49 s&lt;br&gt;c* = 1721.50 m/s&quot;,&quot;O/F = 1.80&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3015.99 K&lt;br&gt;Isp = 247.85 s&lt;br&gt;c* = 1748.00 m/s&quot;,&quot;O/F = 1.90&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3139.21 K&lt;br&gt;Isp = 251.31 s&lt;br&gt;c* = 1767.10 m/s&quot;,&quot;O/F = 2.00&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3238.52 K&lt;br&gt;Isp = 253.94 s&lt;br&gt;c* = 1779.50 m/s&quot;,&quot;O/F = 2.10&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3316.17 K&lt;br&gt;Isp = 255.81 s&lt;br&gt;c* = 1786.20 m/s&quot;,&quot;O/F = 2.20&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3375.12 K&lt;br&gt;Isp = 256.96 s&lt;br&gt;c* = 1788.10 m/s&quot;,&quot;O/F = 2.30&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3418.74 K&lt;br&gt;Isp = 257.48 s&lt;br&gt;c* = 1786.20 m/s&quot;,&quot;O/F = 2.40&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3450.29 K&lt;br&gt;Isp = 257.45 s&lt;br&gt;c* = 1781.50 m/s&quot;,&quot;O/F = 2.50&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3472.58 K&lt;br&gt;Isp = 256.97 s&lt;br&gt;c* = 1774.90 m/s&quot;,&quot;O/F = 2.60&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3487.81 K&lt;br&gt;Isp = 256.16 s&lt;br&gt;c* = 1767.10 m/s&quot;,&quot;O/F = 2.70&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3497.70 K&lt;br&gt;Isp = 255.13 s&lt;br&gt;c* = 1758.50 m/s&quot;,&quot;O/F = 2.80&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3503.48 K&lt;br&gt;Isp = 253.97 s&lt;br&gt;c* = 1749.50 m/s&quot;,&quot;O/F = 2.90&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3506.11 K&lt;br&gt;Isp = 252.74 s&lt;br&gt;c* = 1740.20 m/s&quot;,&quot;O/F = 3.00&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3506.27 K&lt;br&gt;Isp = 251.45 s&lt;br&gt;c* = 1730.90 m/s&quot;,&quot;O/F = 3.10&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3504.48 K&lt;br&gt;Isp = 250.16 s&lt;br&gt;c* = 1721.70 m/s&quot;,&quot;O/F = 3.20&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3501.15 K&lt;br&gt;Isp = 248.85 s&lt;br&gt;c* = 1712.50 m/s&quot;,&quot;O/F = 3.30&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3496.57 K&lt;br&gt;Isp = 247.56 s&lt;br&gt;c* = 1703.40 m/s&quot;,&quot;O/F = 3.40&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3490.97 K&lt;br&gt;Isp = 246.28 s&lt;br&gt;c* = 1694.50 m/s&quot;,&quot;O/F = 3.50&lt;br&gt;Pc = 280 psi&lt;br&gt;Tc = 3484.54 K&lt;br&gt;Isp = 245.03 s&lt;br&gt;c* = 1685.80 m/s&quot;],
+hoverinfo: &quot;text&quot;
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [1490.800000,1576.030000,1739.970000,2010.370000,2261.760000,2490.140000,2693.160000,2869.550000,3019.440000,3143.850000,3244.330000,3323.040000,3382.910000,3427.260000,3459.380000,3482.070000,3497.610000,3507.700000,3513.620000,3516.330000,3516.540000,3514.770000,3511.430000,3506.820000,3501.180000,3494.690000,],
+y: [197.947311,202.168936,207.226729,215.924908,225.357283,233.433435,240.102380,245.578256,250.024218,253.562634,256.275079,258.222737,259.456593,260.048029,260.078620,259.640142,258.865158,257.855639,256.693162,255.449109,254.164266,252.859029,251.543595,250.238359,248.943319,247.678871,],
+z: [1362.600000,1394.800000,1441.500000,1521.400000,1588.200000,1642.600000,1686.700000,1721.600000,1748.300000,1767.500000,1780.200000,1787.100000,1789.200000,1787.400000,1782.800000,1776.300000,1768.600000,1760.000000,1751.000000,1741.800000,1732.500000,1723.200000,1714.000000,1704.900000,1696.000000,1687.300000,],
+mode: &quot;lines+markers&quot;,
+name: &quot;Pc = 300 psi&quot;,
+marker: {size: 4},
+line: {width: 5},
+text: [&quot;O/F = 1.00&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 1490.80 K&lt;br&gt;Isp = 197.95 s&lt;br&gt;c* = 1362.60 m/s&quot;,&quot;O/F = 1.10&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 1576.03 K&lt;br&gt;Isp = 202.17 s&lt;br&gt;c* = 1394.80 m/s&quot;,&quot;O/F = 1.20&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 1739.97 K&lt;br&gt;Isp = 207.23 s&lt;br&gt;c* = 1441.50 m/s&quot;,&quot;O/F = 1.30&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 2010.37 K&lt;br&gt;Isp = 215.92 s&lt;br&gt;c* = 1521.40 m/s&quot;,&quot;O/F = 1.40&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 2261.76 K&lt;br&gt;Isp = 225.36 s&lt;br&gt;c* = 1588.20 m/s&quot;,&quot;O/F = 1.50&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 2490.14 K&lt;br&gt;Isp = 233.43 s&lt;br&gt;c* = 1642.60 m/s&quot;,&quot;O/F = 1.60&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 2693.16 K&lt;br&gt;Isp = 240.10 s&lt;br&gt;c* = 1686.70 m/s&quot;,&quot;O/F = 1.70&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 2869.55 K&lt;br&gt;Isp = 245.58 s&lt;br&gt;c* = 1721.60 m/s&quot;,&quot;O/F = 1.80&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3019.44 K&lt;br&gt;Isp = 250.02 s&lt;br&gt;c* = 1748.30 m/s&quot;,&quot;O/F = 1.90&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3143.85 K&lt;br&gt;Isp = 253.56 s&lt;br&gt;c* = 1767.50 m/s&quot;,&quot;O/F = 2.00&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3244.33 K&lt;br&gt;Isp = 256.28 s&lt;br&gt;c* = 1780.20 m/s&quot;,&quot;O/F = 2.10&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3323.04 K&lt;br&gt;Isp = 258.22 s&lt;br&gt;c* = 1787.10 m/s&quot;,&quot;O/F = 2.20&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3382.91 K&lt;br&gt;Isp = 259.46 s&lt;br&gt;c* = 1789.20 m/s&quot;,&quot;O/F = 2.30&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3427.26 K&lt;br&gt;Isp = 260.05 s&lt;br&gt;c* = 1787.40 m/s&quot;,&quot;O/F = 2.40&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3459.38 K&lt;br&gt;Isp = 260.08 s&lt;br&gt;c* = 1782.80 m/s&quot;,&quot;O/F = 2.50&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3482.07 K&lt;br&gt;Isp = 259.64 s&lt;br&gt;c* = 1776.30 m/s&quot;,&quot;O/F = 2.60&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3497.61 K&lt;br&gt;Isp = 258.87 s&lt;br&gt;c* = 1768.60 m/s&quot;,&quot;O/F = 2.70&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3507.70 K&lt;br&gt;Isp = 257.86 s&lt;br&gt;c* = 1760.00 m/s&quot;,&quot;O/F = 2.80&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3513.62 K&lt;br&gt;Isp = 256.69 s&lt;br&gt;c* = 1751.00 m/s&quot;,&quot;O/F = 2.90&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3516.33 K&lt;br&gt;Isp = 255.45 s&lt;br&gt;c* = 1741.80 m/s&quot;,&quot;O/F = 3.00&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3516.54 K&lt;br&gt;Isp = 254.16 s&lt;br&gt;c* = 1732.50 m/s&quot;,&quot;O/F = 3.10&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3514.77 K&lt;br&gt;Isp = 252.86 s&lt;br&gt;c* = 1723.20 m/s&quot;,&quot;O/F = 3.20&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3511.43 K&lt;br&gt;Isp = 251.54 s&lt;br&gt;c* = 1714.00 m/s&quot;,&quot;O/F = 3.30&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3506.82 K&lt;br&gt;Isp = 250.24 s&lt;br&gt;c* = 1704.90 m/s&quot;,&quot;O/F = 3.40&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3501.18 K&lt;br&gt;Isp = 248.94 s&lt;br&gt;c* = 1696.00 m/s&quot;,&quot;O/F = 3.50&lt;br&gt;Pc = 300 psi&lt;br&gt;Tc = 3494.69 K&lt;br&gt;Isp = 247.68 s&lt;br&gt;c* = 1687.30 m/s&quot;],
+hoverinfo: &quot;text&quot;
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [1494.130000,1578.510000,1740.350000,2010.430000,2261.980000,2490.740000,2694.400000,2871.680000,3022.610000,3148.140000,3249.710000,3329.440000,3390.170000,3435.220000,3467.870000,3490.970000,3506.790000,3517.070000,3523.130000,3525.920000,3526.170000,3524.420000,3521.070000,3516.430000,3510.750000,3504.220000,],
+y: [199.803195,204.014623,209.031626,217.597243,227.029618,235.187347,241.937869,247.485125,252.012665,255.632657,258.416483,260.435521,261.750955,262.413770,262.495348,262.107855,261.353265,260.353943,259.201664,257.957610,256.662571,255.347137,254.021506,252.706072,251.411032,250.126190,],
+z: [1363.700000,1395.900000,1441.800000,1521.400000,1588.200000,1642.600000,1686.700000,1721.800000,1748.600000,1768.000000,1780.800000,1787.900000,1790.200000,1788.600000,1784.100000,1777.700000,1769.900000,1761.400000,1752.400000,1743.200000,1733.900000,1724.600000,1715.400000,1706.300000,1697.400000,1688.700000,],
+mode: &quot;lines+markers&quot;,
+name: &quot;Pc = 320 psi&quot;,
+marker: {size: 4},
+line: {width: 5},
+text: [&quot;O/F = 1.00&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 1494.13 K&lt;br&gt;Isp = 199.80 s&lt;br&gt;c* = 1363.70 m/s&quot;,&quot;O/F = 1.10&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 1578.51 K&lt;br&gt;Isp = 204.01 s&lt;br&gt;c* = 1395.90 m/s&quot;,&quot;O/F = 1.20&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 1740.35 K&lt;br&gt;Isp = 209.03 s&lt;br&gt;c* = 1441.80 m/s&quot;,&quot;O/F = 1.30&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 2010.43 K&lt;br&gt;Isp = 217.60 s&lt;br&gt;c* = 1521.40 m/s&quot;,&quot;O/F = 1.40&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 2261.98 K&lt;br&gt;Isp = 227.03 s&lt;br&gt;c* = 1588.20 m/s&quot;,&quot;O/F = 1.50&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 2490.74 K&lt;br&gt;Isp = 235.19 s&lt;br&gt;c* = 1642.60 m/s&quot;,&quot;O/F = 1.60&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 2694.40 K&lt;br&gt;Isp = 241.94 s&lt;br&gt;c* = 1686.70 m/s&quot;,&quot;O/F = 1.70&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 2871.68 K&lt;br&gt;Isp = 247.49 s&lt;br&gt;c* = 1721.80 m/s&quot;,&quot;O/F = 1.80&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3022.61 K&lt;br&gt;Isp = 252.01 s&lt;br&gt;c* = 1748.60 m/s&quot;,&quot;O/F = 1.90&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3148.14 K&lt;br&gt;Isp = 255.63 s&lt;br&gt;c* = 1768.00 m/s&quot;,&quot;O/F = 2.00&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3249.71 K&lt;br&gt;Isp = 258.42 s&lt;br&gt;c* = 1780.80 m/s&quot;,&quot;O/F = 2.10&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3329.44 K&lt;br&gt;Isp = 260.44 s&lt;br&gt;c* = 1787.90 m/s&quot;,&quot;O/F = 2.20&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3390.17 K&lt;br&gt;Isp = 261.75 s&lt;br&gt;c* = 1790.20 m/s&quot;,&quot;O/F = 2.30&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3435.22 K&lt;br&gt;Isp = 262.41 s&lt;br&gt;c* = 1788.60 m/s&quot;,&quot;O/F = 2.40&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3467.87 K&lt;br&gt;Isp = 262.50 s&lt;br&gt;c* = 1784.10 m/s&quot;,&quot;O/F = 2.50&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3490.97 K&lt;br&gt;Isp = 262.11 s&lt;br&gt;c* = 1777.70 m/s&quot;,&quot;O/F = 2.60&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3506.79 K&lt;br&gt;Isp = 261.35 s&lt;br&gt;c* = 1769.90 m/s&quot;,&quot;O/F = 2.70&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3517.07 K&lt;br&gt;Isp = 260.35 s&lt;br&gt;c* = 1761.40 m/s&quot;,&quot;O/F = 2.80&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3523.13 K&lt;br&gt;Isp = 259.20 s&lt;br&gt;c* = 1752.40 m/s&quot;,&quot;O/F = 2.90&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3525.92 K&lt;br&gt;Isp = 257.96 s&lt;br&gt;c* = 1743.20 m/s&quot;,&quot;O/F = 3.00&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3526.17 K&lt;br&gt;Isp = 256.66 s&lt;br&gt;c* = 1733.90 m/s&quot;,&quot;O/F = 3.10&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3524.42 K&lt;br&gt;Isp = 255.35 s&lt;br&gt;c* = 1724.60 m/s&quot;,&quot;O/F = 3.20&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3521.07 K&lt;br&gt;Isp = 254.02 s&lt;br&gt;c* = 1715.40 m/s&quot;,&quot;O/F = 3.30&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3516.43 K&lt;br&gt;Isp = 252.71 s&lt;br&gt;c* = 1706.30 m/s&quot;,&quot;O/F = 3.40&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3510.75 K&lt;br&gt;Isp = 251.41 s&lt;br&gt;c* = 1697.40 m/s&quot;,&quot;O/F = 3.50&lt;br&gt;Pc = 320 psi&lt;br&gt;Tc = 3504.22 K&lt;br&gt;Isp = 250.13 s&lt;br&gt;c* = 1688.70 m/s&quot;],
+hoverinfo: &quot;text&quot;
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [1497.330000,1580.920000,1740.760000,2010.490000,2262.170000,2491.270000,2695.540000,2873.640000,3025.550000,3152.120000,3254.730000,3335.420000,3396.970000,3442.690000,3475.850000,3499.320000,3515.420000,3525.890000,3532.080000,3534.950000,3535.240000,3533.500000,3530.140000,3525.480000,3519.770000,3513.180000,],
+y: [201.526515,205.748140,210.724355,219.157408,228.579586,236.818893,243.630598,249.259431,253.858351,257.539527,260.394732,262.495348,263.871964,264.606160,264.748920,264.402217,263.678218,262.689094,261.547011,260.302958,258.997721,257.672090,256.346459,255.020828,253.705394,252.410354,],
+z: [1364.800000,1396.800000,1442.200000,1521.400000,1588.200000,1642.600000,1686.800000,1721.900000,1748.800000,1768.400000,1781.400000,1788.700000,1791.100000,1789.600000,1785.300000,1778.900000,1771.200000,1762.700000,1753.700000,1744.500000,1735.200000,1725.900000,1716.700000,1707.600000,1698.700000,1690.000000,],
+mode: &quot;lines+markers&quot;,
+name: &quot;Pc = 340 psi&quot;,
+marker: {size: 4},
+line: {width: 5},
+text: [&quot;O/F = 1.00&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 1497.33 K&lt;br&gt;Isp = 201.53 s&lt;br&gt;c* = 1364.80 m/s&quot;,&quot;O/F = 1.10&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 1580.92 K&lt;br&gt;Isp = 205.75 s&lt;br&gt;c* = 1396.80 m/s&quot;,&quot;O/F = 1.20&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 1740.76 K&lt;br&gt;Isp = 210.72 s&lt;br&gt;c* = 1442.20 m/s&quot;,&quot;O/F = 1.30&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 2010.49 K&lt;br&gt;Isp = 219.16 s&lt;br&gt;c* = 1521.40 m/s&quot;,&quot;O/F = 1.40&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 2262.17 K&lt;br&gt;Isp = 228.58 s&lt;br&gt;c* = 1588.20 m/s&quot;,&quot;O/F = 1.50&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 2491.27 K&lt;br&gt;Isp = 236.82 s&lt;br&gt;c* = 1642.60 m/s&quot;,&quot;O/F = 1.60&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 2695.54 K&lt;br&gt;Isp = 243.63 s&lt;br&gt;c* = 1686.80 m/s&quot;,&quot;O/F = 1.70&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 2873.64 K&lt;br&gt;Isp = 249.26 s&lt;br&gt;c* = 1721.90 m/s&quot;,&quot;O/F = 1.80&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3025.55 K&lt;br&gt;Isp = 253.86 s&lt;br&gt;c* = 1748.80 m/s&quot;,&quot;O/F = 1.90&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3152.12 K&lt;br&gt;Isp = 257.54 s&lt;br&gt;c* = 1768.40 m/s&quot;,&quot;O/F = 2.00&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3254.73 K&lt;br&gt;Isp = 260.39 s&lt;br&gt;c* = 1781.40 m/s&quot;,&quot;O/F = 2.10&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3335.42 K&lt;br&gt;Isp = 262.50 s&lt;br&gt;c* = 1788.70 m/s&quot;,&quot;O/F = 2.20&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3396.97 K&lt;br&gt;Isp = 263.87 s&lt;br&gt;c* = 1791.10 m/s&quot;,&quot;O/F = 2.30&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3442.69 K&lt;br&gt;Isp = 264.61 s&lt;br&gt;c* = 1789.60 m/s&quot;,&quot;O/F = 2.40&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3475.85 K&lt;br&gt;Isp = 264.75 s&lt;br&gt;c* = 1785.30 m/s&quot;,&quot;O/F = 2.50&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3499.32 K&lt;br&gt;Isp = 264.40 s&lt;br&gt;c* = 1778.90 m/s&quot;,&quot;O/F = 2.60&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3515.42 K&lt;br&gt;Isp = 263.68 s&lt;br&gt;c* = 1771.20 m/s&quot;,&quot;O/F = 2.70&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3525.89 K&lt;br&gt;Isp = 262.69 s&lt;br&gt;c* = 1762.70 m/s&quot;,&quot;O/F = 2.80&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3532.08 K&lt;br&gt;Isp = 261.55 s&lt;br&gt;c* = 1753.70 m/s&quot;,&quot;O/F = 2.90&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3534.95 K&lt;br&gt;Isp = 260.30 s&lt;br&gt;c* = 1744.50 m/s&quot;,&quot;O/F = 3.00&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3535.24 K&lt;br&gt;Isp = 259.00 s&lt;br&gt;c* = 1735.20 m/s&quot;,&quot;O/F = 3.10&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3533.50 K&lt;br&gt;Isp = 257.67 s&lt;br&gt;c* = 1725.90 m/s&quot;,&quot;O/F = 3.20&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3530.14 K&lt;br&gt;Isp = 256.35 s&lt;br&gt;c* = 1716.70 m/s&quot;,&quot;O/F = 3.30&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3525.48 K&lt;br&gt;Isp = 255.02 s&lt;br&gt;c* = 1707.60 m/s&quot;,&quot;O/F = 3.40&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3519.77 K&lt;br&gt;Isp = 253.71 s&lt;br&gt;c* = 1698.70 m/s&quot;,&quot;O/F = 3.50&lt;br&gt;Pc = 340 psi&lt;br&gt;Tc = 3513.18 K&lt;br&gt;Isp = 252.41 s&lt;br&gt;c* = 1690.00 m/s&quot;],
+hoverinfo: &quot;text&quot;
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [1500.420000,1583.260000,1741.180000,2010.550000,2262.350000,2491.770000,2696.600000,2875.460000,3028.290000,3155.840000,3259.430000,3341.020000,3403.370000,3449.720000,3483.370000,3507.210000,3523.560000,3534.220000,3540.530000,3543.480000,3543.810000,3542.090000,3538.720000,3534.040000,3528.290000,3521.660000,],
+y: [203.107075,207.338898,212.274324,220.595208,229.996992,238.297482,245.180566,250.870583,255.530686,259.283241,262.209827,264.361428,265.819622,266.604804,266.798550,266.502832,265.799228,264.840695,263.698613,262.454559,261.149322,259.813494,258.477666,257.141837,255.816206,254.510970,],
+z: [1365.800000,1397.800000,1442.600000,1521.400000,1588.200000,1642.600000,1686.800000,1722.000000,1749.100000,1768.800000,1782.000000,1789.400000,1792.000000,1790.600000,1786.400000,1780.000000,1772.400000,1763.900000,1755.000000,1745.800000,1736.500000,1727.200000,1718.000000,1708.900000,1700.000000,1691.200000,],
+mode: &quot;lines+markers&quot;,
+name: &quot;Pc = 360 psi&quot;,
+marker: {size: 4},
+line: {width: 5},
+text: [&quot;O/F = 1.00&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 1500.42 K&lt;br&gt;Isp = 203.11 s&lt;br&gt;c* = 1365.80 m/s&quot;,&quot;O/F = 1.10&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 1583.26 K&lt;br&gt;Isp = 207.34 s&lt;br&gt;c* = 1397.80 m/s&quot;,&quot;O/F = 1.20&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 1741.18 K&lt;br&gt;Isp = 212.27 s&lt;br&gt;c* = 1442.60 m/s&quot;,&quot;O/F = 1.30&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 2010.55 K&lt;br&gt;Isp = 220.60 s&lt;br&gt;c* = 1521.40 m/s&quot;,&quot;O/F = 1.40&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 2262.35 K&lt;br&gt;Isp = 230.00 s&lt;br&gt;c* = 1588.20 m/s&quot;,&quot;O/F = 1.50&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 2491.77 K&lt;br&gt;Isp = 238.30 s&lt;br&gt;c* = 1642.60 m/s&quot;,&quot;O/F = 1.60&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 2696.60 K&lt;br&gt;Isp = 245.18 s&lt;br&gt;c* = 1686.80 m/s&quot;,&quot;O/F = 1.70&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 2875.46 K&lt;br&gt;Isp = 250.87 s&lt;br&gt;c* = 1722.00 m/s&quot;,&quot;O/F = 1.80&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3028.29 K&lt;br&gt;Isp = 255.53 s&lt;br&gt;c* = 1749.10 m/s&quot;,&quot;O/F = 1.90&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3155.84 K&lt;br&gt;Isp = 259.28 s&lt;br&gt;c* = 1768.80 m/s&quot;,&quot;O/F = 2.00&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3259.43 K&lt;br&gt;Isp = 262.21 s&lt;br&gt;c* = 1782.00 m/s&quot;,&quot;O/F = 2.10&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3341.02 K&lt;br&gt;Isp = 264.36 s&lt;br&gt;c* = 1789.40 m/s&quot;,&quot;O/F = 2.20&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3403.37 K&lt;br&gt;Isp = 265.82 s&lt;br&gt;c* = 1792.00 m/s&quot;,&quot;O/F = 2.30&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3449.72 K&lt;br&gt;Isp = 266.60 s&lt;br&gt;c* = 1790.60 m/s&quot;,&quot;O/F = 2.40&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3483.37 K&lt;br&gt;Isp = 266.80 s&lt;br&gt;c* = 1786.40 m/s&quot;,&quot;O/F = 2.50&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3507.21 K&lt;br&gt;Isp = 266.50 s&lt;br&gt;c* = 1780.00 m/s&quot;,&quot;O/F = 2.60&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3523.56 K&lt;br&gt;Isp = 265.80 s&lt;br&gt;c* = 1772.40 m/s&quot;,&quot;O/F = 2.70&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3534.22 K&lt;br&gt;Isp = 264.84 s&lt;br&gt;c* = 1763.90 m/s&quot;,&quot;O/F = 2.80&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3540.53 K&lt;br&gt;Isp = 263.70 s&lt;br&gt;c* = 1755.00 m/s&quot;,&quot;O/F = 2.90&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3543.48 K&lt;br&gt;Isp = 262.45 s&lt;br&gt;c* = 1745.80 m/s&quot;,&quot;O/F = 3.00&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3543.81 K&lt;br&gt;Isp = 261.15 s&lt;br&gt;c* = 1736.50 m/s&quot;,&quot;O/F = 3.10&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3542.09 K&lt;br&gt;Isp = 259.81 s&lt;br&gt;c* = 1727.20 m/s&quot;,&quot;O/F = 3.20&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3538.72 K&lt;br&gt;Isp = 258.48 s&lt;br&gt;c* = 1718.00 m/s&quot;,&quot;O/F = 3.30&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3534.04 K&lt;br&gt;Isp = 257.14 s&lt;br&gt;c* = 1708.90 m/s&quot;,&quot;O/F = 3.40&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3528.29 K&lt;br&gt;Isp = 255.82 s&lt;br&gt;c* = 1700.00 m/s&quot;,&quot;O/F = 3.50&lt;br&gt;Pc = 360 psi&lt;br&gt;Tc = 3521.66 K&lt;br&gt;Isp = 254.51 s&lt;br&gt;c* = 1691.20 m/s&quot;],
+hoverinfo: &quot;text&quot;
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [1503.390000,1585.540000,1741.610000,2010.600000,2262.510000,2492.230000,2697.570000,2877.160000,3030.840000,3159.320000,3263.840000,3346.300000,3409.390000,3456.360000,3490.480000,3514.670000,3531.270000,3542.110000,3548.540000,3551.560000,3551.940000,3550.230000,3546.860000,3542.150000,3536.360000,3529.690000,],
+y: [204.616255,208.837880,213.752913,221.961628,231.343017,239.694493,246.638760,252.389960,257.111246,260.924985,263.912753,266.135734,267.644914,268.491279,268.746208,268.481082,267.818266,266.869930,265.738045,264.493991,263.178557,261.842729,260.496704,259.150678,257.814850,256.499416,],
+z: [1366.800000,1398.600000,1443.000000,1521.400000,1588.200000,1642.600000,1686.800000,1722.100000,1749.300000,1769.100000,1782.500000,1790.100000,1792.800000,1791.600000,1787.400000,1781.100000,1773.500000,1765.100000,1756.200000,1747.000000,1737.700000,1728.400000,1719.200000,1710.100000,1701.100000,1692.400000,],
+mode: &quot;lines+markers&quot;,
+name: &quot;Pc = 380 psi&quot;,
+marker: {size: 4},
+line: {width: 5},
+text: [&quot;O/F = 1.00&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 1503.39 K&lt;br&gt;Isp = 204.62 s&lt;br&gt;c* = 1366.80 m/s&quot;,&quot;O/F = 1.10&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 1585.54 K&lt;br&gt;Isp = 208.84 s&lt;br&gt;c* = 1398.60 m/s&quot;,&quot;O/F = 1.20&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 1741.61 K&lt;br&gt;Isp = 213.75 s&lt;br&gt;c* = 1443.00 m/s&quot;,&quot;O/F = 1.30&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 2010.60 K&lt;br&gt;Isp = 221.96 s&lt;br&gt;c* = 1521.40 m/s&quot;,&quot;O/F = 1.40&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 2262.51 K&lt;br&gt;Isp = 231.34 s&lt;br&gt;c* = 1588.20 m/s&quot;,&quot;O/F = 1.50&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 2492.23 K&lt;br&gt;Isp = 239.69 s&lt;br&gt;c* = 1642.60 m/s&quot;,&quot;O/F = 1.60&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 2697.57 K&lt;br&gt;Isp = 246.64 s&lt;br&gt;c* = 1686.80 m/s&quot;,&quot;O/F = 1.70&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 2877.16 K&lt;br&gt;Isp = 252.39 s&lt;br&gt;c* = 1722.10 m/s&quot;,&quot;O/F = 1.80&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3030.84 K&lt;br&gt;Isp = 257.11 s&lt;br&gt;c* = 1749.30 m/s&quot;,&quot;O/F = 1.90&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3159.32 K&lt;br&gt;Isp = 260.92 s&lt;br&gt;c* = 1769.10 m/s&quot;,&quot;O/F = 2.00&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3263.84 K&lt;br&gt;Isp = 263.91 s&lt;br&gt;c* = 1782.50 m/s&quot;,&quot;O/F = 2.10&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3346.30 K&lt;br&gt;Isp = 266.14 s&lt;br&gt;c* = 1790.10 m/s&quot;,&quot;O/F = 2.20&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3409.39 K&lt;br&gt;Isp = 267.64 s&lt;br&gt;c* = 1792.80 m/s&quot;,&quot;O/F = 2.30&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3456.36 K&lt;br&gt;Isp = 268.49 s&lt;br&gt;c* = 1791.60 m/s&quot;,&quot;O/F = 2.40&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3490.48 K&lt;br&gt;Isp = 268.75 s&lt;br&gt;c* = 1787.40 m/s&quot;,&quot;O/F = 2.50&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3514.67 K&lt;br&gt;Isp = 268.48 s&lt;br&gt;c* = 1781.10 m/s&quot;,&quot;O/F = 2.60&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3531.27 K&lt;br&gt;Isp = 267.82 s&lt;br&gt;c* = 1773.50 m/s&quot;,&quot;O/F = 2.70&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3542.11 K&lt;br&gt;Isp = 266.87 s&lt;br&gt;c* = 1765.10 m/s&quot;,&quot;O/F = 2.80&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3548.54 K&lt;br&gt;Isp = 265.74 s&lt;br&gt;c* = 1756.20 m/s&quot;,&quot;O/F = 2.90&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3551.56 K&lt;br&gt;Isp = 264.49 s&lt;br&gt;c* = 1747.00 m/s&quot;,&quot;O/F = 3.00&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3551.94 K&lt;br&gt;Isp = 263.18 s&lt;br&gt;c* = 1737.70 m/s&quot;,&quot;O/F = 3.10&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3550.23 K&lt;br&gt;Isp = 261.84 s&lt;br&gt;c* = 1728.40 m/s&quot;,&quot;O/F = 3.20&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3546.86 K&lt;br&gt;Isp = 260.50 s&lt;br&gt;c* = 1719.20 m/s&quot;,&quot;O/F = 3.30&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3542.15 K&lt;br&gt;Isp = 259.15 s&lt;br&gt;c* = 1710.10 m/s&quot;,&quot;O/F = 3.40&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3536.36 K&lt;br&gt;Isp = 257.81 s&lt;br&gt;c* = 1701.10 m/s&quot;,&quot;O/F = 3.50&lt;br&gt;Pc = 380 psi&lt;br&gt;Tc = 3529.69 K&lt;br&gt;Isp = 256.50 s&lt;br&gt;c* = 1692.40 m/s&quot;],
+hoverinfo: &quot;text&quot;
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [1506.270000,1587.760000,1742.070000,2010.650000,2262.660000,2492.660000,2698.480000,2878.740000,3033.230000,3162.590000,3267.990000,3351.280000,3415.090000,3462.640000,3497.220000,3521.750000,3538.600000,3549.610000,3556.150000,3559.240000,3559.660000,3557.960000,3554.590000,3549.860000,3544.040000,3537.330000,],
+y: [206.013267,210.245089,215.129529,223.236273,232.576874,240.989533,247.994983,253.807365,258.579637,262.444362,265.493313,267.767280,269.337643,270.245191,270.551106,270.326768,269.694544,268.756405,267.634717,266.390663,265.075230,263.729204,262.383179,261.026956,259.680931,258.355300,],
+z: [1367.700000,1399.500000,1443.400000,1521.400000,1588.200000,1642.600000,1686.800000,1722.200000,1749.500000,1769.500000,1783.000000,1790.700000,1793.600000,1792.500000,1788.400000,1782.200000,1774.600000,1766.200000,1757.300000,1748.100000,1738.800000,1729.500000,1720.300000,1711.200000,1702.200000,1693.500000,],
+mode: &quot;lines+markers&quot;,
+name: &quot;Pc = 400 psi&quot;,
+marker: {size: 4},
+line: {width: 5},
+text: [&quot;O/F = 1.00&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 1506.27 K&lt;br&gt;Isp = 206.01 s&lt;br&gt;c* = 1367.70 m/s&quot;,&quot;O/F = 1.10&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 1587.76 K&lt;br&gt;Isp = 210.25 s&lt;br&gt;c* = 1399.50 m/s&quot;,&quot;O/F = 1.20&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 1742.07 K&lt;br&gt;Isp = 215.13 s&lt;br&gt;c* = 1443.40 m/s&quot;,&quot;O/F = 1.30&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 2010.65 K&lt;br&gt;Isp = 223.24 s&lt;br&gt;c* = 1521.40 m/s&quot;,&quot;O/F = 1.40&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 2262.66 K&lt;br&gt;Isp = 232.58 s&lt;br&gt;c* = 1588.20 m/s&quot;,&quot;O/F = 1.50&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 2492.66 K&lt;br&gt;Isp = 240.99 s&lt;br&gt;c* = 1642.60 m/s&quot;,&quot;O/F = 1.60&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 2698.48 K&lt;br&gt;Isp = 247.99 s&lt;br&gt;c* = 1686.80 m/s&quot;,&quot;O/F = 1.70&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 2878.74 K&lt;br&gt;Isp = 253.81 s&lt;br&gt;c* = 1722.20 m/s&quot;,&quot;O/F = 1.80&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3033.23 K&lt;br&gt;Isp = 258.58 s&lt;br&gt;c* = 1749.50 m/s&quot;,&quot;O/F = 1.90&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3162.59 K&lt;br&gt;Isp = 262.44 s&lt;br&gt;c* = 1769.50 m/s&quot;,&quot;O/F = 2.00&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3267.99 K&lt;br&gt;Isp = 265.49 s&lt;br&gt;c* = 1783.00 m/s&quot;,&quot;O/F = 2.10&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3351.28 K&lt;br&gt;Isp = 267.77 s&lt;br&gt;c* = 1790.70 m/s&quot;,&quot;O/F = 2.20&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3415.09 K&lt;br&gt;Isp = 269.34 s&lt;br&gt;c* = 1793.60 m/s&quot;,&quot;O/F = 2.30&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3462.64 K&lt;br&gt;Isp = 270.25 s&lt;br&gt;c* = 1792.50 m/s&quot;,&quot;O/F = 2.40&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3497.22 K&lt;br&gt;Isp = 270.55 s&lt;br&gt;c* = 1788.40 m/s&quot;,&quot;O/F = 2.50&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3521.75 K&lt;br&gt;Isp = 270.33 s&lt;br&gt;c* = 1782.20 m/s&quot;,&quot;O/F = 2.60&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3538.60 K&lt;br&gt;Isp = 269.69 s&lt;br&gt;c* = 1774.60 m/s&quot;,&quot;O/F = 2.70&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3549.61 K&lt;br&gt;Isp = 268.76 s&lt;br&gt;c* = 1766.20 m/s&quot;,&quot;O/F = 2.80&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3556.15 K&lt;br&gt;Isp = 267.63 s&lt;br&gt;c* = 1757.30 m/s&quot;,&quot;O/F = 2.90&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3559.24 K&lt;br&gt;Isp = 266.39 s&lt;br&gt;c* = 1748.10 m/s&quot;,&quot;O/F = 3.00&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3559.66 K&lt;br&gt;Isp = 265.08 s&lt;br&gt;c* = 1738.80 m/s&quot;,&quot;O/F = 3.10&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3557.96 K&lt;br&gt;Isp = 263.73 s&lt;br&gt;c* = 1729.50 m/s&quot;,&quot;O/F = 3.20&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3554.59 K&lt;br&gt;Isp = 262.38 s&lt;br&gt;c* = 1720.30 m/s&quot;,&quot;O/F = 3.30&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3549.86 K&lt;br&gt;Isp = 261.03 s&lt;br&gt;c* = 1711.20 m/s&quot;,&quot;O/F = 3.40&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3544.04 K&lt;br&gt;Isp = 259.68 s&lt;br&gt;c* = 1702.20 m/s&quot;,&quot;O/F = 3.50&lt;br&gt;Pc = 400 psi&lt;br&gt;Tc = 3537.33 K&lt;br&gt;Isp = 258.36 s&lt;br&gt;c* = 1693.50 m/s&quot;],
+hoverinfo: &quot;text&quot;
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [1471.760000,1475.950000,1479.930000,1483.720000,1487.340000,1490.800000,1494.130000,1497.330000,1500.420000,1503.390000,1506.270000,],
+y: [185.751505,188.718880,191.370142,193.766475,195.948667,197.947311,199.803195,201.526515,203.107075,204.616255,206.013267,],
+z: [1355.600000,1357.200000,1358.700000,1360.100000,1361.400000,1362.600000,1363.700000,1364.800000,1365.800000,1366.800000,1367.700000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 1.00&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [1562.380000,1565.300000,1568.120000,1570.840000,1573.480000,1576.030000,1578.510000,1580.920000,1583.260000,1585.540000,1587.760000,],
+y: [189.973130,192.930307,195.581570,197.977903,200.160095,202.168936,204.014623,205.748140,207.338898,208.837880,210.245089,],
+z: [1388.700000,1390.100000,1391.400000,1392.600000,1393.800000,1394.800000,1395.900000,1396.800000,1397.800000,1398.600000,1399.500000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 1.10&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [1738.350000,1738.630000,1738.930000,1739.260000,1739.600000,1739.970000,1740.350000,1740.760000,1741.180000,1741.610000,1742.070000,],
+y: [195.367429,198.243029,200.812714,203.147864,205.279071,207.226729,209.031626,210.724355,212.274324,213.752913,215.129529,],
+z: [1439.700000,1440.000000,1440.400000,1440.700000,1441.100000,1441.500000,1441.800000,1442.200000,1442.600000,1443.000000,1443.400000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 1.20&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [2009.970000,2010.060000,2010.150000,2010.230000,2010.300000,2010.370000,2010.430000,2010.490000,2010.550000,2010.600000,2010.650000,],
+y: [204.830396,207.542841,209.959568,212.141761,214.120010,215.924908,217.597243,219.157408,220.595208,221.961628,223.236273,],
+z: [1521.400000,1521.400000,1521.400000,1521.400000,1521.400000,1521.400000,1521.400000,1521.400000,1521.400000,1521.400000,1521.400000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 1.30&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [2260.280000,2260.660000,2260.980000,2261.270000,2261.530000,2261.760000,2261.980000,2262.170000,2262.350000,2262.510000,2262.660000,],
+y: [213.956856,216.781470,219.279774,221.512953,223.531991,225.357283,227.029618,228.579586,229.996992,231.343017,232.576874,],
+z: [1588.200000,1588.200000,1588.200000,1588.200000,1588.200000,1588.200000,1588.200000,1588.200000,1588.200000,1588.200000,1588.200000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 1.40&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [2486.050000,2487.080000,2487.980000,2488.780000,2489.500000,2490.140000,2490.740000,2491.270000,2491.770000,2492.230000,2492.660000,],
+y: [221.472164,224.439538,227.060209,229.405556,231.516369,233.433435,235.187347,236.818893,238.297482,239.694493,240.989533,],
+z: [1642.600000,1642.600000,1642.600000,1642.600000,1642.600000,1642.600000,1642.600000,1642.600000,1642.600000,1642.600000,1642.600000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 1.50&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [2684.680000,2686.780000,2688.640000,2690.310000,2691.800000,2693.160000,2694.400000,2695.540000,2696.600000,2697.570000,2698.480000,],
+y: [227.600659,230.700596,233.443633,235.890952,238.093539,240.102380,241.937869,243.630598,245.180566,246.638760,247.994983,],
+z: [1686.400000,1686.500000,1686.500000,1686.600000,1686.600000,1686.700000,1686.700000,1686.800000,1686.800000,1686.800000,1686.800000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 1.60&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [2855.220000,2858.730000,2861.860000,2864.670000,2867.220000,2869.550000,2871.680000,2873.640000,2875.460000,2877.160000,2878.740000,],
+y: [232.566677,235.788980,238.644185,241.193476,243.487837,245.578256,247.485125,249.259431,250.870583,252.389960,253.807365,],
+z: [1720.700000,1720.900000,1721.100000,1721.300000,1721.500000,1721.600000,1721.800000,1721.900000,1722.000000,1722.100000,1722.200000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 1.70&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [2998.400000,3003.510000,3008.090000,3012.220000,3015.990000,3019.440000,3022.610000,3025.550000,3028.290000,3030.840000,3033.230000,],
+y: [236.512978,239.857648,242.825022,245.466087,247.852223,250.024218,252.012665,253.858351,255.530686,257.111246,258.579637,],
+z: [1746.400000,1746.900000,1747.300000,1747.700000,1748.000000,1748.300000,1748.600000,1748.800000,1749.100000,1749.300000,1749.500000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 1.80&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3115.820000,3122.570000,3128.650000,3134.170000,3139.210000,3143.850000,3148.140000,3152.120000,3155.840000,3159.320000,3162.590000,],
+y: [239.541536,243.018768,246.088114,248.831150,251.309061,253.562634,255.632657,257.539527,259.283241,260.924985,262.444362,],
+z: [1764.500000,1765.300000,1765.900000,1766.500000,1767.100000,1767.500000,1768.000000,1768.400000,1768.800000,1769.100000,1769.500000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 1.90&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3209.510000,3217.840000,3225.370000,3232.220000,3238.520000,3244.330000,3249.710000,3254.730000,3259.430000,3263.840000,3267.990000,],
+y: [241.744123,245.343721,248.525235,251.370244,253.939929,256.275079,258.416483,260.394732,262.209827,263.912753,265.493313,],
+z: [1775.900000,1777.000000,1777.900000,1778.800000,1779.500000,1780.200000,1780.800000,1781.400000,1782.000000,1782.500000,1783.000000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 2.00&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3282.090000,3291.830000,3300.660000,3308.730000,3316.170000,3323.040000,3329.440000,3335.420000,3341.020000,3346.300000,3351.280000,],
+y: [243.202317,246.914084,250.197570,253.144550,255.806009,258.222737,260.435521,262.495348,264.361428,266.135734,267.767280,],
+z: [1781.700000,1783.000000,1784.200000,1785.200000,1786.200000,1787.100000,1787.900000,1788.700000,1789.400000,1790.100000,1790.700000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 2.10&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3336.780000,3347.690000,3357.620000,3366.720000,3375.120000,3382.910000,3390.170000,3396.970000,3403.370000,3409.390000,3415.090000,],
+y: [243.977301,247.791040,251.176498,254.215252,256.958289,259.456593,261.750955,263.871964,265.819622,267.644914,269.337643,],
+z: [1782.700000,1784.200000,1785.600000,1786.900000,1788.100000,1789.200000,1790.200000,1791.100000,1792.000000,1792.800000,1793.600000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 2.20&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3377.010000,3388.850000,3399.650000,3409.570000,3418.740000,3427.260000,3435.220000,3442.690000,3449.720000,3456.360000,3462.640000,],
+y: [244.160850,248.066363,251.543595,254.653730,257.478344,260.048029,262.413770,264.606160,266.604804,268.491279,270.245191,],
+z: [1780.100000,1781.800000,1783.400000,1784.900000,1786.200000,1787.400000,1788.600000,1789.600000,1790.600000,1791.600000,1792.500000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 2.30&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3405.990000,3418.530000,3429.990000,3440.530000,3450.290000,3459.380000,3467.870000,3475.850000,3483.370000,3490.480000,3497.220000,],
+y: [243.865132,247.842026,251.380441,254.561955,257.447752,260.078620,262.495348,264.748920,266.798550,268.746208,270.551106,],
+z: [1774.900000,1776.800000,1778.500000,1780.100000,1781.500000,1782.800000,1784.100000,1785.300000,1786.400000,1787.400000,1788.400000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 2.40&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3426.380000,3439.440000,3451.380000,3462.380000,3472.580000,3482.070000,3490.970000,3499.320000,3507.210000,3514.670000,3521.750000,],
+y: [243.202317,247.230196,250.809400,254.041900,256.968486,259.640142,262.107855,264.402217,266.502832,268.481082,270.326768,],
+z: [1767.900000,1769.900000,1771.700000,1773.400000,1774.900000,1776.300000,1777.700000,1778.900000,1780.000000,1781.100000,1782.200000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 2.50&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3440.260000,3453.690000,3465.980000,3477.310000,3487.810000,3497.610000,3506.790000,3515.420000,3523.560000,3531.270000,3538.600000,],
+y: [242.304967,246.343043,249.952838,253.205733,256.162910,258.865158,261.353265,263.678218,265.799228,267.818266,269.694544,],
+z: [1759.900000,1761.900000,1763.800000,1765.500000,1767.100000,1768.600000,1769.900000,1771.200000,1772.400000,1773.500000,1774.600000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 2.60&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3449.210000,3462.890000,3475.420000,3486.970000,3497.700000,3507.700000,3517.070000,3525.890000,3534.220000,3542.110000,3549.610000,],
+y: [241.234265,245.282538,248.902530,252.165622,255.132996,257.855639,260.353943,262.689094,264.840695,266.869930,268.756405,],
+z: [1751.200000,1753.200000,1755.100000,1756.900000,1758.500000,1760.000000,1761.400000,1762.700000,1763.900000,1765.100000,1766.200000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 2.70&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3454.370000,3468.220000,3480.910000,3492.620000,3503.480000,3513.620000,3523.130000,3532.080000,3540.530000,3548.540000,3556.150000,],
+y: [240.071788,244.120061,247.740054,251.003146,253.970520,256.693162,259.201664,261.547011,263.698613,265.738045,267.634717,],
+z: [1742.100000,1744.200000,1746.100000,1747.900000,1749.500000,1751.000000,1752.400000,1753.700000,1755.000000,1756.200000,1757.300000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 2.80&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3456.610000,3470.570000,3483.350000,3495.150000,3506.110000,3516.330000,3525.920000,3534.950000,3543.480000,3551.560000,3559.240000,],
+y: [238.858326,242.896402,246.506197,249.769289,252.736663,255.449109,257.957610,260.302958,262.454559,264.493991,266.390663,],
+z: [1732.800000,1734.900000,1736.800000,1738.600000,1740.200000,1741.800000,1743.200000,1744.500000,1745.800000,1747.000000,1748.100000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 2.90&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3456.580000,3470.580000,3483.420000,3495.270000,3506.270000,3516.540000,3526.170000,3535.240000,3543.810000,3551.940000,3559.660000,],
+y: [237.614272,241.642151,245.241749,248.494644,251.451821,254.164266,256.662571,258.997721,261.149322,263.178557,265.075230,],
+z: [1723.500000,1725.600000,1727.500000,1729.300000,1730.900000,1732.500000,1733.900000,1735.200000,1736.500000,1737.700000,1738.800000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 3.00&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3454.730000,3468.750000,3481.600000,3493.470000,3504.480000,3514.770000,3524.420000,3533.500000,3542.090000,3550.230000,3557.960000,],
+y: [236.370218,240.377703,243.967104,247.199604,250.156781,252.859029,255.347137,257.672090,259.813494,261.842729,263.729204,],
+z: [1714.200000,1716.300000,1718.200000,1720.000000,1721.700000,1723.200000,1724.600000,1725.900000,1727.200000,1728.400000,1729.500000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 3.10&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3451.450000,3465.460000,3478.290000,3490.140000,3501.150000,3511.430000,3521.070000,3530.140000,3538.720000,3546.860000,3554.590000,],
+y: [235.136362,239.123452,242.692459,245.914762,248.851545,251.543595,254.021506,256.346459,258.477666,260.496704,262.383179,],
+z: [1705.000000,1707.200000,1709.100000,1710.800000,1712.500000,1714.000000,1715.400000,1716.700000,1718.000000,1719.200000,1720.300000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 3.20&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3447.010000,3460.970000,3473.770000,3485.590000,3496.570000,3506.820000,3516.430000,3525.480000,3534.040000,3542.150000,3549.860000,],
+y: [233.902505,237.879398,241.428011,244.640117,247.556505,250.238359,252.706072,255.020828,257.141837,259.150678,261.026956,],
+z: [1696.000000,1698.100000,1700.000000,1701.800000,1703.400000,1704.900000,1706.300000,1707.600000,1708.900000,1710.100000,1711.200000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 3.30&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3441.620000,3455.530000,3468.270000,3480.040000,3490.970000,3501.180000,3510.750000,3519.770000,3528.290000,3536.360000,3544.040000,],
+y: [232.699240,236.645542,240.183957,243.375669,246.281860,248.943319,251.411032,253.705394,255.816206,257.814850,259.680931,],
+z: [1687.200000,1689.300000,1691.200000,1692.900000,1694.500000,1696.000000,1697.400000,1698.700000,1700.000000,1701.100000,1702.200000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 3.40&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+data.push({
+type: &quot;scatter3d&quot;,
+x: [3435.460000,3449.290000,3461.970000,3473.670000,3484.540000,3494.690000,3504.220000,3513.180000,3521.660000,3529.690000,3537.330000,],
+y: [231.506172,235.442276,238.960297,242.131615,245.027609,247.678871,250.126190,252.410354,254.510970,256.499416,258.355300,],
+z: [1678.500000,1680.600000,1682.500000,1684.200000,1685.800000,1687.300000,1688.700000,1690.000000,1691.200000,1692.400000,1693.500000,],
+mode: &quot;lines&quot;,
+line: {dash: &quot;dash&quot;, color: &quot;rgba(180,180,180,0.45)&quot;, width: 3},
+name: &quot;O/F = 3.50&quot;,
+hoverinfo: &quot;skip&quot;,
+showlegend: false
+});
+var layout = {
+paper_bgcolor: &quot;#0b0f19&quot;,
+plot_bgcolor: &quot;#0b0f19&quot;,
+font: {color: &quot;#e5e7eb&quot;},
+scene: {
+xaxis: {title: &quot;Chamber Temperature Tc [K]&quot;, backgroundcolor: &quot;#111827&quot;, gridcolor: &quot;#374151&quot;, zerolinecolor: &quot;#6b7280&quot;},
+yaxis: {title: &quot;Specific Impulse Isp [s]&quot;, backgroundcolor: &quot;#111827&quot;, gridcolor: &quot;#374151&quot;, zerolinecolor: &quot;#6b7280&quot;},
+zaxis: {title: &quot;Characteristic Velocity c* [m/s]&quot;, backgroundcolor: &quot;#111827&quot;, gridcolor: &quot;#374151&quot;, zerolinecolor: &quot;#6b7280&quot;}
+},
+legend: {font: {color: &quot;#e5e7eb&quot;}},
+margin: {l:0, r:0, b:0, t:50}
+};
+Plotly.newPlot(&quot;plot&quot;, data, layout, {responsive: true, displaylogo: false, scrollZoom: true});
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
+">
+      </iframe>
+      <p class="cea-plot-hint">Drag or swipe to rotate • pinch/scroll to zoom • tap/hover for values</p>
     </div>
   </div>
 </section>
